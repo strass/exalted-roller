@@ -1,6 +1,6 @@
 var Discord = require("discord.js");
 var mybot = new Discord.Client();
-credentials = require("./token.js")
+credentials = require("./token.js");
 mybot.loginWithToken(credentials.token);
 
 // Look for messages starting with roll
@@ -24,6 +24,24 @@ mybot.on("message", function(message) {
 //
 
 
+// To-do: turn roll into a class?
+function Roll(numDice) {
+    var roll = function(numDice) {
+        var rolls = [];
+        var i = 0;
+        while (i < numDice) {
+            rolls.push(rolld10());
+            i++;
+        }
+        return rolls;
+    };
+    this.rolls = roll(numDice);
+    this.target = 7;
+    this.double = 10;
+    this.reroll = false;
+    this.autosuccesses = 0;
+}
+
 function parseMessage(message) {
     message = message.toString();
     var parsed = message.split(" ");
@@ -35,36 +53,25 @@ function parseMessage(message) {
     if (parsed[1].match(/^\d+/g)) {
         // get digits at beginning of string
         // I'm fairly sure this could be improved upon...
-        numDice = parsed[1].match(/^\d+/g);
-        numDice = numDice[0];
-        countSuccesses(roll(numDice), target, doubleIfGreaterThan);
-        return roll(numDice);
-
+        // numDice = parsed[1].match(/^\d+/g);
+        // numDice = numDice[0];
+        // countSuccesses(roll(numDice), target, doubleIfGreaterThan);
+        // return roll(numDice);
+        var theRoll = new Roll(numDice);
     } else {
         // Bad syntax handling
         // To-do: add better support here
-        return "I can't find any numbers after roll. Syntax: roll 8d10";
+        return "I can't find any numbers after roll. Syntax: roll/tn#/db#s/re#s/as# 8d10";
     }
 }
 
 // Dice rolling:
-function roll(n) {
-    var rolls = [];
-    var i = 0;
-    while (i < n) {
-        rolls.push(rolld10());
-        i++;
-    }
-    return rolls;
-}
-
-
 function rolld10() {
     return Math.floor(Math.random() * 10 + 1);
 }
 
 // Dice handling:
-function countSuccesses(rolls, target, doubleIfGreaterThan) {
+function countSuccesses(rolls, target, double, reroll, autosuccesses) {
     for (var i in rolls) {
         if (rolls[i] >= doubleIfGreaterThan) {
             rolls[i] = [rolls[i], 2];
@@ -75,5 +82,8 @@ function countSuccesses(rolls, target, doubleIfGreaterThan) {
             rolls[i] = [rolls[i], 0];
         }
     }
+
+    // Apply autosuccesses to roll
+    rolls.push(autosuccesses);
     return rolls;
 }
