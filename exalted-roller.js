@@ -23,8 +23,6 @@ mybot.on("message", function(message) {
 // as: adds a flat number of successes
 //
 
-
-// To-do: turn roll into a class?
 function Roll(numDice) {
     var roll = function(numDice) {
         var rolls = [];
@@ -34,6 +32,9 @@ function Roll(numDice) {
             i++;
         }
         return rolls;
+    };
+    var rolld10 = function() {
+        return Math.floor(Math.random() * 10 + 1);
     };
     this.rolls = roll(numDice);
     this.target = 7;
@@ -47,27 +48,51 @@ function parseMessage(message) {
     var parsed = message.split(" ");
 
     // log parsed message for debugging:
-    console.log(parsed);
+    console.log("parsed message: " + parsed);
 
     // Look for a digit after "roll"
     if (parsed[1].match(/^\d+/g)) {
         // get digits at beginning of string
         // I'm fairly sure this could be improved upon...
-        // numDice = parsed[1].match(/^\d+/g);
-        // numDice = numDice[0];
+        var numDice = parsed[1].match(/^\d+/g);
+        numDice = numDice[0];
         // countSuccesses(roll(numDice), target, doubleIfGreaterThan);
         // return roll(numDice);
+
+        // Create a new Roll Object
         var theRoll = new Roll(numDice);
+
+        // Parse roll options and pass to theRoll
+        var options = parsed[0].split("/");
+        for (var i in options) {
+            if (options[i].startsWith("tn")) {
+                var target = options[i].match(/\d+/g);
+                console.log("target is " + target);
+                theRoll.target = target;
+            }
+            if (options[i].startsWith("db")) {
+                var double = options[i].match(/\d+/g);
+                console.log("double is " + double);
+                theRoll.double = double;
+            }
+            if (options[i].startsWith("re")) {
+                var reroll = options[i].match(/\d+/g);
+                console.log("reroll is " + reroll);
+                theRoll.reroll = reroll;
+            }
+            if (options[i].startsWith("as")) {
+                var autosuccesses = options[i].match(/\d+/g);
+                console.log("autosuccesses is " + autosuccesses);
+                theRoll.autosuccesses = autosuccesses;
+            }
+            console.log(theRoll);
+        }
+
     } else {
         // Bad syntax handling
         // To-do: add better support here
         return "I can't find any numbers after roll. Syntax: roll/tn#/db#s/re#s/as# 8d10";
     }
-}
-
-// Dice rolling:
-function rolld10() {
-    return Math.floor(Math.random() * 10 + 1);
 }
 
 // Dice handling:
