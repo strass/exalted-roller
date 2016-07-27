@@ -33,14 +33,18 @@ function Roll(numDice) {
         }
         return rolls;
     };
-    var rolld10 = function() {
-        return Math.floor(Math.random() * 10 + 1);
-    };
+    this.rerollSet = new Set();
     this.rolls = roll(numDice);
     this.target = 7;
     this.double = 10;
     this.reroll = false;
     this.autosuccesses = 0;
+}
+
+// This is called first within Roll Object and sometimes during rerolls
+// Should it live here?
+function rolld10() {
+    return Math.floor(Math.random() * 10 + 1);
 }
 
 function parseMessage(message) {
@@ -50,14 +54,13 @@ function parseMessage(message) {
     // log parsed message for debugging:
     console.log("parsed message: " + parsed);
 
-    // Look for a digit after "roll"
+    // If there's a number of dice at the end of the roll message...
     if (parsed[1].match(/^\d+/g)) {
+
         // get digits at beginning of string
         // I'm fairly sure this could be improved upon...
         var numDice = parsed[1].match(/^\d+/g);
         numDice = numDice[0];
-        // countSuccesses(roll(numDice), target, doubleIfGreaterThan);
-        // return roll(numDice);
 
         // Create a new Roll Object
         var theRoll = new Roll(numDice);
@@ -65,27 +68,39 @@ function parseMessage(message) {
         // Parse roll options and pass to theRoll
         var options = parsed[0].split("/");
         for (var i in options) {
+            // set target number
             if (options[i].startsWith("tn")) {
                 var target = options[i].match(/\d+/g);
                 console.log("target is " + target);
                 theRoll.target = target;
             }
+            // set doubles
             if (options[i].startsWith("db")) {
                 var double = options[i].match(/\d+/g);
                 console.log("double is " + double);
                 theRoll.double = double;
             }
+            // set rerolls
+            // To-do: Right now re15610 will add "15610" to rerollSet,
+            // but it should match individual die numbers
+            // The problem is that 10 is 2 digits so I can't just
+            // regex for (/\d/g)...
+            // P.S. do I need the /g global tag?
             if (options[i].startsWith("re")) {
                 var reroll = options[i].match(/\d+/g);
                 console.log("reroll is " + reroll);
-                theRoll.reroll = reroll;
+                rerollSet.add(reroll);
             }
+            // set autosuccesses
             if (options[i].startsWith("as")) {
                 var autosuccesses = options[i].match(/\d+/g);
                 console.log("autosuccesses is " + autosuccesses);
                 theRoll.autosuccesses = autosuccesses;
             }
             console.log(theRoll);
+
+            // Pass theRoll through countSuccesses
+            return parseRoll(theRoll);
         }
 
     } else {
@@ -96,19 +111,53 @@ function parseMessage(message) {
 }
 
 // Dice handling:
-function countSuccesses(rolls, target, double, reroll, autosuccesses) {
-    for (var i in rolls) {
-        if (rolls[i] >= doubleIfGreaterThan) {
-            rolls[i] = [rolls[i], 2];
-        } else if (rolls[i] >= target) {
-            rolls[i] = [rolls[i], 1];
+function parseRoll(theRoll) {
+    // reroll dice
+    checkForRerolls(rolls, rerollSet);
 
-        } else {
-            rolls[i] = [rolls[i], 0];
+
+    for (var i in theRoll.rolls) {
+        for (var j in theRoll.reroll) {
+            // if any of the roll results are equal to a rerolled value,
+            // reroll them and add them within the array.
+            // if they are still a rerolled value, reroll again.
+            if (theRoll.rolls[i] == theRoll.reroll[j])
+
         }
     }
 
-    // Apply autosuccesses to roll
-    rolls.push(autosuccesses);
-    return rolls;
+    // compare vs target number
+    // for (var i in theRoll.rolls) {
+
+    // }
+
+    // double successes
+    //
+    // reroll dice
+    //
+    // add autosuccesses and return final message to be sent to chat
 }
+
+// Check whether our roll value is contained in our rerollSet
+// If so, initiate a cascade
+function checkForRerolls(rolls, rerollSet) {
+  for (var i in rolls) {
+    if (rerollSet.has(rolls[i])) {
+        cascade(rolls,rerollSet);
+    }
+  }
+}
+
+// Make a new roll, add it to our roll array. If this new value is
+// also a reroll, run cascade again
+function cascade(rolls,rerollSet) {
+  roll = rolld10();
+  rolls.push(roll);
+  if (rerollSet.has(roll)) {
+    cascade(rolls,rerollSet);
+  }
+}
+
+// function countSuccesses {
+
+// }
