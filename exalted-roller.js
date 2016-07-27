@@ -66,6 +66,7 @@ function parseMessage(message) {
         var theRoll = new Roll(numDice);
 
         // Parse roll options and pass to theRoll
+        // To-do: test if empty array causes error
         var options = parsed[0].split("/");
         console.log("options: " + options);
 
@@ -84,15 +85,12 @@ function parseMessage(message) {
                 theRoll.double = double;
             }
             // set rerolls
-            // To-do: Right now re15610 will add "15610" to rerollSet,
-            // but it should match individual die numbers
-            // The problem is that 10 is 2 digits so I can't just
-            // regex for (/\d/g)...
-            // P.S. do I need the /g global tag?
             if (options[i].startsWith("re")) {
-                var reroll = options[i].match(/\d+/g);
+                var reroll = options[i].match(/10|\d/g);
                 console.log("reroll is " + reroll);
-                theRoll.rerollSet.add(reroll);
+                reroll.forEach(function(item) {
+                    theRoll.rerollSet.add(parseInt(item, 10));
+                })
             }
             // set autosuccesses
             if (options[i].startsWith("as")) {
