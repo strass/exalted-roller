@@ -130,9 +130,23 @@ function cascade(rolls, rerollSet) {
 
 function countSuccessesAndDisplayResults(theRoll) {
     // Sort dice rolls
-    console.log("presort: "+theRoll.rolls)
-    theRoll.rolls = theRoll.rolls.sort
-    console.log("postsort: "+theRoll.rolls)
-    // Format dice rolls
-    return true;
+    theRoll.rolls = theRoll.rolls.sort(function(a, b){return a-b});
+    // Count successes and format results
+    var successes = theRoll.autosuccesses;
+    for (var i in theRoll.rolls) {
+        if (theRoll.rolls[i] >= theRoll.target && theRoll.doubleSet.has(theRoll.rolls[i]) && theRoll.rerollSet.has(theRoll.rolls[i])) {
+            successes+=2;
+            theRoll.rolls[i] = "~~__**"+theRoll.rolls[i]+"**__~~";
+        } else if (theRoll.rolls[i] >= theRoll.target && theRoll.doubleSet.has(theRoll.rolls[i])) {
+            successes+=2;
+            theRoll.rolls[i] = "__**"+theRoll.rolls[i]+"**__";
+        } else if (theRoll.rolls[i] >= theRoll.target) {
+            successes+=1;
+            theRoll.rolls[i] = "**"+theRoll.rolls[i]+"**";
+        } else if (theRoll.rerollSet.has(theRoll.rolls[i])) {
+            theRoll.rolls[i] = "~~"+theRoll.rolls[i]+"~~";
+        }
+    }
+    console.log(theRoll.rolls);
+    return "you rolled " + theRoll.rolls + " for a total of **" + successes + "** successes";
 }
