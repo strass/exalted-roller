@@ -67,7 +67,10 @@ function parseMessage(message) {
 
         // Parse roll options and pass to theRoll
         var options = parsed[0].split("/");
+        console.log("options: " + options);
+
         for (var i in options) {
+            console.log("working through:" + options[i]);
             // set target number
             if (options[i].startsWith("tn")) {
                 var target = options[i].match(/\d+/g);
@@ -89,7 +92,7 @@ function parseMessage(message) {
             if (options[i].startsWith("re")) {
                 var reroll = options[i].match(/\d+/g);
                 console.log("reroll is " + reroll);
-                rerollSet.add(reroll);
+                theRoll.rerollSet.add(reroll);
             }
             // set autosuccesses
             if (options[i].startsWith("as")) {
@@ -97,12 +100,11 @@ function parseMessage(message) {
                 console.log("autosuccesses is " + autosuccesses);
                 theRoll.autosuccesses = autosuccesses;
             }
-            console.log(theRoll);
 
             // Pass theRoll through countSuccesses
-            return parseRoll(theRoll);
         }
-
+        console.log(theRoll);
+        return parseRoll(theRoll);
     } else {
         // Bad syntax handling
         // To-do: add better support here
@@ -113,18 +115,7 @@ function parseMessage(message) {
 // Dice handling:
 function parseRoll(theRoll) {
     // reroll dice
-    checkForRerolls(rolls, rerollSet);
-
-
-    for (var i in theRoll.rolls) {
-        for (var j in theRoll.reroll) {
-            // if any of the roll results are equal to a rerolled value,
-            // reroll them and add them within the array.
-            // if they are still a rerolled value, reroll again.
-            if (theRoll.rolls[i] == theRoll.reroll[j])
-
-        }
-    }
+    checkForRerolls(theRoll.rolls, theRoll.rerollSet);
 
     // compare vs target number
     // for (var i in theRoll.rolls) {
@@ -136,26 +127,28 @@ function parseRoll(theRoll) {
     // reroll dice
     //
     // add autosuccesses and return final message to be sent to chat
+    return theRoll.rolls;
 }
 
 // Check whether our roll value is contained in our rerollSet
 // If so, initiate a cascade
 function checkForRerolls(rolls, rerollSet) {
-  for (var i in rolls) {
-    if (rerollSet.has(rolls[i])) {
-        cascade(rolls,rerollSet);
+    for (var i in rolls) {
+        if (rerollSet.has(rolls[i])) {
+            cascade(rolls, rerollSet);
+        }
     }
-  }
 }
 
 // Make a new roll, add it to our roll array. If this new value is
 // also a reroll, run cascade again
-function cascade(rolls,rerollSet) {
-  roll = rolld10();
-  rolls.push(roll);
-  if (rerollSet.has(roll)) {
-    cascade(rolls,rerollSet);
-  }
+function cascade(rolls, rerollSet) {
+    roll = rolld10();
+    console.log("rerolling! result: " + roll);
+    rolls.push(roll);
+    if (rerollSet.has(roll)) {
+        cascade(rolls, rerollSet);
+    }
 }
 
 // function countSuccesses {
