@@ -26,18 +26,15 @@ mybot.on("message", function(message) {
 function Roll(numDice) {
     var roll = function(numDice) {
         var rolls = [];
-        var i = 0;
-        while (i < numDice) {
+        for (var i = 0; i < numDice; i++) {
             rolls.push(rolld10());
-            i++;
         }
         return rolls;
     };
+    this.doubleSet = new Set([10]);
     this.rerollSet = new Set();
     this.rolls = roll(numDice);
     this.target = 7;
-    this.double = 10;
-    this.reroll = false;
     this.autosuccesses = 0;
 }
 
@@ -52,7 +49,7 @@ function parseMessage(message) {
     var parsed = message.split(" ");
 
     // log parsed message for debugging:
-    console.log("parsed message: " + parsed);
+    // console.log("parsed message: " + parsed);
 
     // If there's a number of dice at the end of the roll message...
     if (parsed[1].match(/^\d+/g)) {
@@ -71,23 +68,23 @@ function parseMessage(message) {
         console.log("options: " + options);
 
         for (var i in options) {
-            console.log("working through:" + options[i]);
             // set target number
             if (options[i].startsWith("tn")) {
                 var target = options[i].match(/\d+/g);
-                console.log("target is " + target);
-                theRoll.target = target;
+                theRoll.target = parseInt(target, 10);
             }
             // set doubles
+            // To-do: add code to not double 10's
+            // To-do: add code for double 7+ (doub;les 7,8,9,and 10)
             if (options[i].startsWith("db")) {
-                var double = options[i].match(/\d+/g);
-                console.log("double is " + double);
-                theRoll.double = double;
+                var double = options[i].match(/10|\d/g);
+                double.forEach(function(item) {
+                    theRoll.doubleSet.add(parseInt(item, 10));
+                })
             }
             // set rerolls
             if (options[i].startsWith("re")) {
                 var reroll = options[i].match(/10|\d/g);
-                console.log("reroll is " + reroll);
                 reroll.forEach(function(item) {
                     theRoll.rerollSet.add(parseInt(item, 10));
                 })
@@ -95,14 +92,16 @@ function parseMessage(message) {
             // set autosuccesses
             if (options[i].startsWith("as")) {
                 var autosuccesses = options[i].match(/\d+/g);
-                console.log("autosuccesses is " + autosuccesses);
-                theRoll.autosuccesses = autosuccesses;
+                theRoll.autosuccesses = parseInt(autosuccesses, 10);
             }
 
-            // Pass theRoll through countSuccesses
         }
+        checkForRerolls(theRoll.rolls, theRoll.rerollSet);
         console.log(theRoll);
-        return parseRoll(theRoll);
+
+        // Pass theRoll through countSuccessesAndDisplayResults
+        return countSuccessesAndDisplayResults(theRoll);
+
     } else {
         // Bad syntax handling
         // To-do: add better support here
@@ -110,25 +109,7 @@ function parseMessage(message) {
     }
 }
 
-// Dice handling:
-function parseRoll(theRoll) {
-    // reroll dice
-    checkForRerolls(theRoll.rolls, theRoll.rerollSet);
-
-    // compare vs target number
-    // for (var i in theRoll.rolls) {
-
-    // }
-
-    // double successes
-    //
-    // reroll dice
-    //
-    // add autosuccesses and return final message to be sent to chat
-    return theRoll.rolls;
-}
-
-// Check whether our roll value is contained in our rerollSet
+// Check whether any of our roll values are contained in our rerollSet
 // If so, initiate a cascade
 function checkForRerolls(rolls, rerollSet) {
     for (var i in rolls) {
@@ -137,18 +118,21 @@ function checkForRerolls(rolls, rerollSet) {
         }
     }
 }
-
 // Make a new roll, add it to our roll array. If this new value is
 // also a reroll, run cascade again
 function cascade(rolls, rerollSet) {
     roll = rolld10();
-    console.log("rerolling! result: " + roll);
     rolls.push(roll);
     if (rerollSet.has(roll)) {
         cascade(rolls, rerollSet);
     }
 }
 
-// function countSuccesses {
-
-// }
+function countSuccessesAndDisplayResults(theRoll) {
+    // Sort dice rolls
+    console.log("presort: "+theRoll.rolls)
+    theRoll.rolls = theRoll.rolls.sort
+    console.log("postsort: "+theRoll.rolls)
+    // Format dice rolls
+    return true;
+}
