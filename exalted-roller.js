@@ -3,25 +3,52 @@ var mybot = new Discord.Client();
 credentials = require("./token.js");
 mybot.loginWithToken(credentials.token);
 
+rerollString = ".roll"
+
+
 // Look for messages starting with roll
 // To-do: change to .roll
 mybot.on("message", function(message) {
-    if (message.content.startsWith("roll")) {
+    if (message.content.startsWith(rerollString)) {
         mybot.reply(message, parseMessage(message));
     }
 });
 
+// A quick guide to Exalted rolling:
 //
-// SYNTAX GUIDE:
-// Handle: target number, double successes (single and #+),
-// rerolls (single and cascading), autosuccess
+// Roll a pool of d10, each individual dice showing
+// a number greater than the target number (7 by default)
+// generates a success. 10's generate two successes. If
+// you roll more successes than the difficulty of an action,
+// you succeed. To roll n dice, simply type `.roll n`.
 //
-// .roll/tn6/
-// tn: single target number, values >= to this will count as a success. Default: 7
-// db: double x's. 7 double's 7 only, 7+ is 7 and up. Default: 10
-// re: reroll #
-// as: adds a flat number of successes
+// Some powers let you change how you roll:i
 //
+// * The simplest is an autosucces. Each autosuccess adds
+// 1 success to the result of your roll. Autosuccess
+// can be added with the \as# command, `.roll\as1 4`
+// would roll 4 dice and then add an additional success
+// to the result.
+// * The default target number is 7. All results greater than
+// or equal to 7 will be rerolled. The target number can be
+// changed with \tn. For example `.roll\tn6 #` will roll #
+// dice, generating a success for each number greater than or
+// euqal to 6.
+// * Doubles generate twice the number of successes. If you
+// are rolling double 9's, each 9 in your pool would add two
+// successes instead of one. `.roll\db789 #` would roll # dice
+// and double the successes of 7, 8, 9, and 10 (since 10 is
+// doubled by default). If you don't want to double your 10s,
+// use /no10 in the roll: `.roll\no10 #`.
+// * Rerolls faces are rerolled after recording successes.
+// `.roll\re56 8` will roll 8 dice, rerolling 5's and 6's.
+// These cascade, meaning that if another 5 or 6 is rerolled,
+// it will be rerolled as well.
+//
+// Text output: D10 bot will reply with the dice you rolled
+// and computes the number of successes. Successes are bolded,
+// doubles are underlined, and rerolls have strikethrough.
+
 
 function Roll(numDice) {
     var roll = function(numDice) {
@@ -88,6 +115,20 @@ function parseMessage(message) {
                 reroll.forEach(function(item) {
                     theRoll.rerollSet.add(parseInt(item, 10));
                 })
+                set = theRoll.rerollSet;
+                if (set.has(1) &&
+                    set.has(2) &&
+                    set.has(3) &&
+                    set.has(4) &&
+                    set.has(5) &&
+                    set.has(6) &&
+                    set.has(7) &&
+                    set.has(8) &&
+                    set.has(9) &&
+                    set.has(10) &&
+                ) {
+                    return = "Reroll every face? What are you trying to do, give me a headache?";
+                }
             }
             // set autosuccesses
             if (options[i].startsWith("as")) {
