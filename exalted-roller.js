@@ -133,7 +133,7 @@ function parseMessage(message) {
                     set.has(9) &&
                     set.has(10)
                 ) {
-                    return = "Reroll every face? What are you trying to do, give me a headache?";
+                    return "Reroll every face? What are you trying to do, give me a headache?";
                 }
             }
             // set autosuccesses
