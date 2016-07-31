@@ -43,11 +43,11 @@ doubles are underlined, and rerolls have strikethrough.
 
 ## How to use
 I have the bot deployed on an ec2 instance. You can invite it
-to your discord channel by going (https://discordapp.com/oauth2/authorize?client_id=207977122462040064&scope=bot&permissions=0)[here] and
+to your discord channel by going [here](https://discordapp.com/oauth2/authorize?client_id=207977122462040064&scope=bot&permissions=0) and
 inviting him to a channel you administrate.
 
 ## To-do:
-* Better error handling
+* ~~Better error handling~~ **added somewhat subpar error handling 2016-07-31 let's see if it's enough**
 * More helpful help (really any help feature at all)
-* Option to not double 10's
+* ~~Option to not double 10's~~ **/no10 flag added2016-07-30**
 * Option to have /db7+ mean double 7, 8, 9, and 10
