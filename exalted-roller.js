@@ -81,8 +81,8 @@ function parseMessage(message) {
     // console.log("parsed message: " + parsed);
 
     // Some variables and shortcuts to use:
-    var anyNumber = "/^\d+/g";
-    var tenOrSingleDigit = "/10|\d/g" 
+    var anyNumber = /^\d+/g;
+    var tenOrSingleDigit = /10|\d/g;
 
     // If there's a number of dice at the end of the roll message...
     if (parsed[1].match(anyNumber)) {
