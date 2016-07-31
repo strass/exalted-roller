@@ -140,8 +140,9 @@ function countSuccessesAndDisplayResults(theRoll) {
         } else if (theRoll.rolls[i] >= theRoll.target && theRoll.doubleSet.has(theRoll.rolls[i])) {
             successes+=2;
             theRoll.rolls[i] = "__**"+theRoll.rolls[i]+"**__";
-        } else if () { // code for > target && reroll
-
+        } else if (theRoll.rolls[i] >= theRoll.target && theRoll.rerollSet.has(theRoll.rolls[1])) { // code for > target && reroll
+            successes+=1;
+            theRoll.rolls[i] = "~~**"+theRoll.rolls[i] + "**~~";
         } else if (theRoll.rolls[i] >= theRoll.target) {
             successes+=1;
             theRoll.rolls[i] = "**"+theRoll.rolls[i]+"**";
