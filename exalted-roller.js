@@ -74,16 +74,22 @@ function rolld10() {
 function parseMessage(message) {
     message = message.toString();
     var parsed = message.split(" ");
-
+    if (message.length == 1) {
+        return "syntax guide: MIA"
+    }
     // log parsed message for debugging:
     // console.log("parsed message: " + parsed);
 
-    // If there's a number of dice at the end of the roll message...
-    if (parsed[1].match(/^\d+/g)) {
+    // Some variables and shortcuts to use:
+    var anyNumber = "/^\d+/g";
+    var tenOrSingleDigit = "/10|\d/g" 
 
-        // get digits at beginning of string
+    // If there's a number of dice at the end of the roll message...
+    if (parsed[1].match(anyNumber)) {
+
+        // get digits at beginning of second split string
         // I'm fairly sure this could be improved upon...
-        var numDice = parsed[1].match(/^\d+/g);
+        var numDice = parsed[1].match(anyNumber);
         numDice = numDice[0];
 
         // Create a new Roll Object
@@ -92,26 +98,26 @@ function parseMessage(message) {
         // Parse roll options and pass to theRoll
         // To-do: test if empty array causes error
         var options = parsed[0].split("/");
-        console.log("options: " + options);
+        // console.log("options: " + options);
 
         for (var i in options) {
             // set target number
             if (options[i].startsWith("tn")) {
-                var target = options[i].match(/\d+/g);
+                var target = options[i].match(anyNumber);
                 theRoll.target = parseInt(target, 10);
             }
             // set doubles
             // To-do: add code to not double 10's
             // To-do: add code for double 7+ (doub;les 7,8,9,and 10)
             if (options[i].startsWith("db")) {
-                var double = options[i].match(/10|\d/g);
+                var double = options[i].match(tenOrSingleDigit);
                 double.forEach(function(item) {
                     theRoll.doubleSet.add(parseInt(item, 10));
                 })
             }
             // set rerolls
             if (options[i].startsWith("re")) {
-                var reroll = options[i].match(/10|\d/g);
+                var reroll = options[i].match(tenOrSingleDigit);
                 reroll.forEach(function(item) {
                     theRoll.rerollSet.add(parseInt(item, 10));
                 })
@@ -125,7 +131,7 @@ function parseMessage(message) {
                     set.has(7) &&
                     set.has(8) &&
                     set.has(9) &&
-                    set.has(10) &&
+                    set.has(10)
                 ) {
                     return = "Reroll every face? What are you trying to do, give me a headache?";
                 }
@@ -135,10 +141,12 @@ function parseMessage(message) {
                 var autosuccesses = options[i].match(/\d+/g);
                 theRoll.autosuccesses = parseInt(autosuccesses, 10);
             }
+            if (options[i].startsWith("no10")) {
+                theRoll.rerollSet.delete(10);
+            }
 
         }
         checkForRerolls(theRoll.rolls, theRoll.rerollSet);
-        console.log(theRoll);
 
         // Pass theRoll through countSuccessesAndDisplayResults
         return countSuccessesAndDisplayResults(theRoll);
@@ -146,7 +154,7 @@ function parseMessage(message) {
     } else {
         // Bad syntax handling
         // To-do: add better support here
-        return "I can't find any numbers after roll. Syntax: roll/tn#/db#s/re#s/as# 8d10";
+        return "I can't find any numbers after roll. Syntax: .roll/tn#/db#s/re#s/as#/no10 8d10";
     }
 }
 
