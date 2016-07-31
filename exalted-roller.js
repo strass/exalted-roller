@@ -73,8 +73,15 @@ function rolld10() {
 
 function parseMessage(message) {
     message = message.toString();
+
+    console.log(message);
+
     var parsed = message.split(" ");
-    if (message.length == 1) {
+
+    console.log(parsed);
+
+    if (parsed.length == 1) {
+        console.log("syntax requested");
         return "syntax guide: MIA"
     }
     // log parsed message for debugging:
