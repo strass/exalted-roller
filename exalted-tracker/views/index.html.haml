@@ -1,0 +1,18 @@
+.container-fluid
+  .row
+    %h1.row Exalted 3e combat tracker
+  .row
+    #tracker.col-md
+      %table
+        %thead
+          %tr
+            %th Turn
+            %th Initiative
+            %th Character
+        %tbody
+      %form.row#input
+        %input.col-xs.initiative{:value => "Initiative value"}
+        %input.col-xs.name{:value => "Character name"}
+        %input.col-xs{:type => "submit"}
+    #info.col-md
+      %button Next turn

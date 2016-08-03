@@ -1,0 +1,23 @@
+// Bootstrap Grid only
+//
+// Includes relevant variables and mixins for the regular (non-flexbox) grid
+// system, as well as the generated predefined classes (e.g., `.col-4-sm`).
+
+
+//
+// Variables
+//
+
+@import "bootstrap/custom";
+@import "bootstrap/variables";
+
+//
+// Grid mixins
+//
+
+@import "bootstrap/mixins/clearfix";
+@import "bootstrap/mixins/breakpoints";
+@import "bootstrap/mixins/grid-framework";
+@import "bootstrap/mixins/grid";
+
+@import "bootstrap/grid";
