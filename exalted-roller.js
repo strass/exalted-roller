@@ -82,7 +82,7 @@ function parseMessage(message) {
 
     if (parsed.length == 1) {
         console.log("syntax requested");
-        return "syntax guide: MIA"
+        return "syntax guide: `.roll/db#s/re#s/tn#/as# #`"
     }
     // log parsed message for debugging:
     // console.log("parsed message: " + parsed);
