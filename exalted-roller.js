@@ -110,7 +110,8 @@ function parseMessage(message) {
         for (var i in options) {
             // set target number
             if (options[i].startsWith("tn")) {
-                var target = options[i].match(anyNumber);
+                // THIS IS A REALLY UGLY HOTFIX :-\
+                var target = options[i].match(/\d+/g);
                 console.log(target);
                 theRoll.target = parseInt(target, 10);
             }
