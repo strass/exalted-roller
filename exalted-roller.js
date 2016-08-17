@@ -113,7 +113,6 @@ function parseMessage(message) {
                 var target = options[i].match(anyNumber);
                 console.log(target);
                 theRoll.target = parseInt(target, 10);
-                console.log(theRoll.target);
             }
             // set doubles
             // To-do: add code to not double 10's
@@ -189,6 +188,7 @@ function cascade(rolls, rerollSet) {
 function countSuccessesAndDisplayResults(theRoll) {
     // Sort dice rolls
     theRoll.rolls = theRoll.rolls.sort(function(a, b){return a-b});
+    console.log(theRoll)
     // Count successes and format results
     var successes = theRoll.autosuccesses;
     for (var i in theRoll.rolls) {
