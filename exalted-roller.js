@@ -111,7 +111,9 @@ function parseMessage(message) {
             // set target number
             if (options[i].startsWith("tn")) {
                 var target = options[i].match(anyNumber);
+                console.log(target);
                 theRoll.target = parseInt(target, 10);
+                console.log(theRoll.target);
             }
             // set doubles
             // To-do: add code to not double 10's
