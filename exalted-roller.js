@@ -1,13 +1,13 @@
 const Discord = require('discord.js');
 const mybot = new Discord.Client();
 
-bot.on('ready', () => {
+mybot.on('ready', () => {
   console.log('I am ready!');
 });
 
 var listenString = ".roll"
 // Look for messages starting with roll
-bot.on('message', message => {
+mybot.on('message', message => {
     if (message.content.startsWith(listenString)) {
         mybot.reply(message, parseMessage(message));
     }
