@@ -36,10 +36,10 @@ mybot.on("message", function(message) {
 // euqal to 6.
 // * Doubles generate twice the number of successes. If you
 // are rolling double 9's, each 9 in your pool would add two
-// successes instead of one. `.roll\db789 #` would roll # dice
+// successes instead of one. `.roll/db789 #` would roll # dice
 // and double the successes of 7, 8, 9, and 10 (since 10 is
 // doubled by default). If you don't want to double your 10s,
-// use /no10 in the roll: `.roll\no10 #`.
+// use /no10 in the roll: `.roll/no10 #`.
 // * Rerolls faces are rerolled after recording successes.
 // `.roll\re56 8` will roll 8 dice, rerolling 5's and 6's.
 // These cascade, meaning that if another 5 or 6 is rerolled,
@@ -82,7 +82,7 @@ function parseMessage(message) {
 
     if (parsed.length == 1) {
         console.log("syntax requested");
-        return "syntax guide: `.roll/db#s/re#s/tn#/as# #`"
+        return "syntax guide: `.roll/db#s/re#s/tn#/as#/no10 #` (no10 not currently working)"
     }
     // log parsed message for debugging:
     // console.log("parsed message: " + parsed);
@@ -151,7 +151,8 @@ function parseMessage(message) {
                 theRoll.autosuccesses = parseInt(autosuccesses, 10);
             }
             if (options[i].startsWith("no10")) {
-                theRoll.rerollSet.delete(10);
+                theRoll.doubleSet.delete(10);
+            	console.log("no10 flag found");
             }
 
         }

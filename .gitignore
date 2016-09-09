@@ -1,2 +1,5 @@
 # Don't share your token!
 token.js
+
+# Dependencies
+node_modules
