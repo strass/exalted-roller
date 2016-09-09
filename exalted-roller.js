@@ -3,13 +3,13 @@ var mybot = new Discord.Client();
 credentials = require("./token.js");
 mybot.loginWithToken(credentials.token);
 
-rerollString = ".roll"
+listenString = ".roll"
 
 
 // Look for messages starting with roll
 // To-do: change to .roll
 mybot.on("message", function(message) {
-    if (message.content.startsWith(rerollString)) {
+    if (message.content.startsWith(listenString)) {
         mybot.reply(message, parseMessage(message));
     }
 });
