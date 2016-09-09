@@ -1,14 +1,13 @@
-var Discord = require("discord.js");
-var mybot = new Discord.Client();
-credentials = require("./token.js");
-mybot.loginWithToken(credentials.token);
+const Discord = require('discord.js');
+const mybot = new Discord.Client();
 
-listenString = ".roll"
+bot.on('ready', () => {
+  console.log('I am ready!');
+});
 
-
+var listenString = ".roll"
 // Look for messages starting with roll
-// To-do: change to .roll
-mybot.on("message", function(message) {
+bot.on('message', message => {
     if (message.content.startsWith(listenString)) {
         mybot.reply(message, parseMessage(message));
     }
@@ -49,7 +48,7 @@ mybot.on("message", function(message) {
 // and computes the number of successes. Successes are bolded,
 // doubles are underlined, and rerolls have strikethrough.
 
-
+// Roll object constructor
 function Roll(numDice) {
     var roll = function(numDice) {
         var rolls = [];
@@ -65,12 +64,12 @@ function Roll(numDice) {
     this.autosuccesses = 0;
 }
 
-// This is called first within Roll Object and sometimes during rerolls
-// Should it live here?
+// Roll 1d10 function
 function rolld10() {
     return Math.floor(Math.random() * 10 + 1);
 }
 
+// Message parsing
 function parseMessage(message) {
     message = message.toString();
 
@@ -82,7 +81,7 @@ function parseMessage(message) {
 
     if (parsed.length == 1) {
         console.log("syntax requested");
-        return "syntax guide: `.roll/db#s/re#s/tn#/as#/no10 #` (no10 not currently working)"
+        return "syntax guide: `.roll/db#s/re#s/tn#/as#/no10 #`"
     }
     // log parsed message for debugging:
     // console.log("parsed message: " + parsed);
@@ -116,7 +115,6 @@ function parseMessage(message) {
                 theRoll.target = parseInt(target, 10);
             }
             // set doubles
-            // To-do: add code to not double 10's
             // To-do: add code for double 7+ (doub;les 7,8,9,and 10)
             if (options[i].startsWith("db")) {
                 var double = options[i].match(tenOrSingleDigit);
@@ -131,6 +129,7 @@ function parseMessage(message) {
                     theRoll.rerollSet.add(parseInt(item, 10));
                 })
                 set = theRoll.rerollSet;
+                // Stop infinite cascading reroll
                 if (set.has(1) &&
                     set.has(2) &&
                     set.has(3) &&
@@ -150,6 +149,7 @@ function parseMessage(message) {
                 var autosuccesses = options[i].match(/\d+/g);
                 theRoll.autosuccesses = parseInt(autosuccesses, 10);
             }
+            // Don't double 10s of the /no10/ flag is active
             if (options[i].startsWith("no10")) {
                 theRoll.doubleSet.delete(10);
             	console.log("no10 flag found");
@@ -213,3 +213,8 @@ function countSuccessesAndDisplayResults(theRoll) {
     console.log(theRoll.rolls);
     return "you rolled " + theRoll.rolls + " for a total of **" + successes + "** successes";
 }
+
+
+credentials = require("./token.js");
+mybot.login(credentials.token);
+
