@@ -9,7 +9,7 @@ var listenString = ".roll"
 // Look for messages starting with roll
 mybot.on('message', message => {
     if (message.content.startsWith(listenString)) {
-        mybot.reply(message, parseMessage(message));
+        message.reply(parseMessage(message));
     }
 });
 
