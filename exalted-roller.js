@@ -7,11 +7,6 @@ mybot.on('ready', () => {
   console.log('I am ready!');
 });
 
-<<<<<<<
-var listenString = ".roll"
-=======
-
->>>>>>>
 // Look for messages starting with roll
 mybot.on("message", function(message) {
   if (message.content.startsWith(rerollString)) {
@@ -225,8 +220,7 @@ function countSuccessesAndDisplayResults(theRoll) {
 }
 
 
-credentials = require("./token.js");
-mybot.login(credentials.token);
+
 
 
 // ROLE MANAGEMENT
@@ -279,3 +273,7 @@ function changeRoles(message) {
     })
   }
 }
+
+
+credentials = require("./token.js");
+mybot.login(credentials.token);
