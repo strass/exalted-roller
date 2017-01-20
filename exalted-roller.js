@@ -261,9 +261,10 @@ function changeRoles (message) {
       }
       if (newroles.length > 0) {
         message.member.setRoles(newroles)
-        message.channel.sendMessage(nickname + ' tags ' + flavortext)
+        return flavortext
       }
     })
+  return ''
 }
 
 const credentials = require('./token.js')
