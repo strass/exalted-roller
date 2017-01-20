@@ -147,29 +147,29 @@ function parseMessage (message) {
         set.has(9) &&
         set.has(10)
       ) {
-          return 'Reroll every face? What are you trying to do, give me a headache?'
-        }
-      }
-    // set autosuccesses
-      if (options[i].startsWith('as')) {
-        var autosuccesses = options[i].match(/\d+/g)
-        theRoll.autosuccesses = parseInt(autosuccesses, 10)
-      }
-    // Don't double 10s of the /no10/ flag is active
-      if (options[i].startsWith('no10')) {
-        theRoll.doubleSet.delete(10)
-        console.log('no10 flag found')
+        return 'Reroll every face? What are you trying to do, give me a headache?'
       }
     }
-    checkForRerolls(theRoll.rolls, theRoll.rerollSet)
+    // set autosuccesses
+    if (options[i].startsWith('as')) {
+      var autosuccesses = options[i].match(/\d+/g)
+      theRoll.autosuccesses = parseInt(autosuccesses, 10)
+    }
+    // Don't double 10s of the /no10/ flag is active
+    if (options[i].startsWith('no10')) {
+      theRoll.doubleSet.delete(10)
+      console.log('no10 flag found')
+    }
+  }
+  checkForRerolls(theRoll.rolls, theRoll.rerollSet)
 
   // Pass theRoll through countSuccessesAndDisplayResults
-    return countSuccessesAndDisplayResults(theRoll)
-  } else {
+  return countSuccessesAndDisplayResults(theRoll)
+} else {
   // Bad syntax handling
   // To-do: add better support here
-    return "I can't find any numbers after roll. Syntax: .roll/tn#/db#s/re#s/as#/no10 8d10"
-  }
+  return "I can't find any numbers after roll. Syntax: .roll/tn#/db#s/re#s/as#/no10 8d10"
+}
 }
 
 // Check whether any of our roll values are contained in our rerollSet
@@ -221,51 +221,50 @@ function countSuccessesAndDisplayResults (theRoll) {
 // ROLE MANAGEMENT
 // TODO: restrict to Exalted Gaming server, turn off caps sensitivity
 function changeRoles (message) {
-    const availableroles = ['1e', '2e', '3e', 'Godbound', 'LFG', 'Member', 'LFP', 'Storytellers', 'Players', 'Voice or Text', 'Voice Only', 'Text Only']
-    var rolestotoggle = []
-    var newroles = []
-    var flavortext = ''
-    var basetags = message.content.split('(')
-    basetags.shift()
-    basetags.forEach(function (potentialtag) {
-      var toggletag = potentialtag.match(/([a-z A-Z0-9',]+)/)
-      if ((toggletag) && (availableroles.includes(toggletag[1]))) {
-        rolestotoggle.push(toggletag[1])
-      }
+  const availableroles = ['1e', '2e', '3e', 'Godbound', 'LFG', 'Member', 'LFP', 'Storytellers', 'Players', 'Voice or Text', 'Voice Only', 'Text Only']
+  var rolestotoggle = []
+  var newroles = []
+  var flavortext = ''
+  var basetags = message.content.split('(')
+  basetags.shift()
+  basetags.forEach(function (potentialtag) {
+    var toggletag = potentialtag.match(/([a-z A-Z0-9',]+)/)
+    if ((toggletag) && (availableroles.includes(toggletag[1]))) {
+      rolestotoggle.push(toggletag[1])
+    }
 
-      if (message.guild && (rolestotoggle.length > 0)) {
-        var roles = message.guild.roles.array()
-        // var originalroles = message.member.roles // never used?
-        roles.forEach(function (role) {
-          if (message.member.roles.has(role.id)) {
-            if (rolestotoggle.includes(role.name)) {
-              console.log('Removed ' + role.name + ' for ' + message.author.username)
-              flavortext += '-' + role.name + ' '
-            } else {
-              newroles.push(role.id)
-            }
+    if (message.guild && (rolestotoggle.length > 0)) {
+      var roles = message.guild.roles.array()
+      // var originalroles = message.member.roles // never used?
+      roles.forEach(function (role) {
+        if (message.member.roles.has(role.id)) {
+          if (rolestotoggle.includes(role.name)) {
+            console.log('Removed ' + role.name + ' for ' + message.author.username)
+            flavortext += '-' + role.name + ' '
           } else {
-            if (rolestotoggle.includes(role.name)) {
-              console.log('Added ' + role.name + ' for ' + message.author.username)
-              newroles.push(role.id)
-              flavortext += '+' + role.name + ' '
-            }
+            newroles.push(role.id)
           }
-        })
-      }
+        } else {
+          if (rolestotoggle.includes(role.name)) {
+            console.log('Added ' + role.name + ' for ' + message.author.username)
+            newroles.push(role.id)
+            flavortext += '+' + role.name + ' '
+          }
+        }
+      })
+    }
+  })
 
-      var nickname = 'User'
-      if (!message.member.nickname) {
-        nickname = message.author.username
-      } else {
-        nickname = message.member.nickname
-      }
-      if (newroles.length > 0) {
-        message.member.setRoles(newroles)
-        return flavortext
-      }
-    })
-  return ''
+  var nickname = 'User'
+  if (!message.member.nickname) {
+    nickname = message.author.username
+  } else {
+    nickname = message.member.nickname
+  }
+  if (newroles.length > 0) {
+    message.member.setRoles(newroles)
+    return "tags:", flavortext
+  }
 }
 
 const credentials = require('./token.js')
