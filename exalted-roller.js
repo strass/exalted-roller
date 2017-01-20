@@ -1,17 +1,25 @@
 const Discord = require('discord.js');
 const mybot = new Discord.Client();
 
+const rerollString = ".roll"
+const roleString = "!role"
 mybot.on('ready', () => {
   console.log('I am ready!');
 });
 
+<<<<<<<
 var listenString = ".roll"
+=======
+
+>>>>>>>
 // Look for messages starting with roll
-mybot.on('message', message => {
-    if (message.content.startsWith(listenString)) {
-        // console.log(message)
-        message.reply(parseMessage(message.content));
-    }
+mybot.on("message", function(message) {
+  if (message.content.startsWith(rerollString)) {
+    mybot.reply(message, parseMessage(message));
+  }
+  if (message.content.startsWith(roleString)) {
+    mybot.reply(message, changeRoles(message));
+  }
 });
 
 // A quick guide to Exalted rolling:
@@ -51,23 +59,23 @@ mybot.on('message', message => {
 
 // Roll object constructor
 function Roll(numDice) {
-    var roll = function(numDice) {
-        var rolls = [];
-        for (var i = 0; i < numDice; i++) {
-            rolls.push(rolld10());
-        }
-        return rolls;
-    };
-    this.doubleSet = new Set([10]);
-    this.rerollSet = new Set();
-    this.rolls = roll(numDice);
-    this.target = 7;
-    this.autosuccesses = 0;
+  var roll = function(numDice) {
+    var rolls = [];
+    for (var i = 0; i < numDice; i++) {
+      rolls.push(rolld10());
+    }
+    return rolls;
+  };
+  this.doubleSet = new Set([10]);
+  this.rerollSet = new Set();
+  this.rolls = roll(numDice);
+  this.target = 7;
+  this.autosuccesses = 0;
 }
 
 // Roll 1d10 function
 function rolld10() {
-    return Math.floor(Math.random() * 10 + 1);
+  return Math.floor(Math.random() * 10 + 1);
 }
 
 // Message parsing
@@ -87,25 +95,25 @@ function parseMessage(message) {
     // log parsed message for debugging:
     // console.log("parsed message: " + parsed);
 
-    // Some variables and shortcuts to use:
-    var anyNumber = /^\d+/g;
-    var tenOrSingleDigit = /10|\d/g;
+  // Some variables and shortcuts to use:
+  var anyNumber = /^\d+/g;
+  var tenOrSingleDigit = /10|\d/g;
 
-    // If there's a number of dice at the end of the roll message...
-    if (parsed[1].match(anyNumber)) {
+  // If there's a number of dice at the end of the roll message...
+  if (parsed[1].match(anyNumber)) {
 
-        // get digits at beginning of second split string
-        // I'm fairly sure this could be improved upon...
-        var numDice = parsed[1].match(anyNumber);
-        numDice = numDice[0];
+    // get digits at beginning of second split string
+    // I'm fairly sure this could be improved upon...
+    var numDice = parsed[1].match(anyNumber);
+    numDice = numDice[0];
 
-        // Create a new Roll Object
-        var theRoll = new Roll(numDice);
+    // Create a new Roll Object
+    var theRoll = new Roll(numDice);
 
-        // Parse roll options and pass to theRoll
-        // To-do: test if empty array causes error
-        var options = parsed[0].split("/");
-        // console.log("options: " + options);
+    // Parse roll options and pass to theRoll
+    // To-do: test if empty array causes error
+    var options = parsed[0].split("/");
+    // console.log("options: " + options);
 
         for (var i in options) {
             // set target number
@@ -156,36 +164,36 @@ function parseMessage(message) {
             	console.log("no10 flag found");
             }
 
-        }
-        checkForRerolls(theRoll.rolls, theRoll.rerollSet);
+  }
+  checkForRerolls(theRoll.rolls, theRoll.rerollSet);
 
-        // Pass theRoll through countSuccessesAndDisplayResults
-        return countSuccessesAndDisplayResults(theRoll);
+  // Pass theRoll through countSuccessesAndDisplayResults
+  return countSuccessesAndDisplayResults(theRoll);
 
-    } else {
-        // Bad syntax handling
-        // To-do: add better support here
-        return "I can't find any numbers after roll. Syntax: .roll/tn#/db#s/re#s/as#/no10 8d10";
-    }
+} else {
+  // Bad syntax handling
+  // To-do: add better support here
+  return "I can't find any numbers after roll. Syntax: .roll/tn#/db#s/re#s/as#/no10 8d10";
+}
 }
 
 // Check whether any of our roll values are contained in our rerollSet
 // If so, initiate a cascade
 function checkForRerolls(rolls, rerollSet) {
-    for (var i in rolls) {
-        if (rerollSet.has(rolls[i])) {
-            cascade(rolls, rerollSet);
-        }
+  for (var i in rolls) {
+    if (rerollSet.has(rolls[i])) {
+      cascade(rolls, rerollSet);
     }
+  }
 }
 // Make a new roll, add it to our roll array. If this new value is
 // also a reroll, run cascade again
 function cascade(rolls, rerollSet) {
-    roll = rolld10();
-    rolls.push(roll);
-    if (rerollSet.has(roll)) {
-        cascade(rolls, rerollSet);
-    }
+  roll = rolld10();
+  rolls.push(roll);
+  if (rerollSet.has(roll)) {
+    cascade(rolls, rerollSet);
+  }
 }
 
 function countSuccessesAndDisplayResults(theRoll) {
@@ -211,11 +219,63 @@ function countSuccessesAndDisplayResults(theRoll) {
             theRoll.rolls[i] = "~~"+theRoll.rolls[i]+"~~";
         }
     }
-    console.log(theRoll.rolls);
-    return "you rolled " + theRoll.rolls + " for a total of **" + successes + "** successes";
+  }
+  console.log(theRoll.rolls);
+  return "you rolled " + theRoll.rolls + " for a total of **" + successes + "** successes";
 }
 
 
 credentials = require("./token.js");
 mybot.login(credentials.token);
 
+
+// ROLE MANAGEMENT
+function changeRoles(message) {
+  let trueinput = message.split(" ")
+  if (trueinput[0] === "!role") {
+    const availableroles = ["1e", "2e", "3e", "Godbound", "LFG", "Member", "LFP", "Storytellers", "Players", "Voice or Text", "Voice Only", "Text Only"];
+    var rolestotoggle = [];
+    var newroles =[];
+    var flavortext = "";
+    var basetags = message.content.split("(");
+    basetags.shift();
+    basetags.forEach(function(potentialtag) {
+      var toggletag = potentialtag.match(/([a-z A-Z0-9',]+)/);
+      if((toggletag) && (availableroles.includes(toggletag[1]))) {
+        rolestotoggle.push(toggletag[1]);
+      }
+
+      if(message.guild && (rolestotoggle.length > 0)) {
+        var roles = message.guild.roles.array();
+        var originalroles = message.member.roles;
+        roles.forEach(function(role) {
+          if ( message.member.roles.has(role.id) ) {
+            if(rolestotoggle.includes(role.name)) {
+              console.log("Removed "+role.name+" for "+message.author.username);
+              flavortext += "-"+role.name+" ";
+            } else {
+              newroles.push(role.id);
+            }
+          } else {
+            if ( rolestotoggle.includes(role.name) ) {
+              console.log("Added "+role.name+" for "+message.author.username);
+              newroles.push(role.id);
+              flavortext += "+"+role.name+" ";
+            }
+          }
+        })
+      }
+
+      var nickname = "User";
+      if (!message.member.nickname) {
+        nickname = message.author.username;
+      } else {
+        nickname = message.member.nickname;
+      }
+      if( newroles.length > 0 ) {
+        message.member.setRoles(newroles);
+        message.channel.sendMessage(nickname +" tags "+flavortext);
+      }
+    })
+  }
+}
