@@ -3,15 +3,11 @@ const mybot = new Discord.Client();
 
 const rerollString = ".roll"
 const roleString = "!role"
+
 mybot.on('ready', () => {
   console.log('I am ready!');
 });
 
-<<<<<<<
-var listenString = ".roll"
-=======
-
->>>>>>>
 // Look for messages starting with roll
 mybot.on("message", function(message) {
   if (message.content.startsWith(rerollString)) {
@@ -80,20 +76,20 @@ function rolld10() {
 
 // Message parsing
 function parseMessage(message) {
-    message = message.toString();
+  message = message.toString();
 
-    console.log(message);
+  console.log(message);
 
-    var parsed = message.split(" ");
+  var parsed = message.split(" ");
 
-    console.log(parsed);
+  console.log(parsed);
 
-    if (parsed.length == 1) {
-        console.log("syntax requested");
-        return "syntax guide: `.roll/db#s/re#s/tn#/as#/no10 #`"
-    }
-    // log parsed message for debugging:
-    // console.log("parsed message: " + parsed);
+  if (parsed.length == 1) {
+    console.log("syntax requested");
+    return "syntax guide: `.roll/db#s/re#s/tn#/as#/no10 #`"
+  }
+  // log parsed message for debugging:
+  // console.log("parsed message: " + parsed);
 
   // Some variables and shortcuts to use:
   var anyNumber = /^\d+/g;
@@ -115,54 +111,54 @@ function parseMessage(message) {
     var options = parsed[0].split("/");
     // console.log("options: " + options);
 
-        for (var i in options) {
-            // set target number
-            if (options[i].startsWith("tn")) {
-                // THIS IS A REALLY UGLY HOTFIX :-\
-                var target = options[i].match(/\d+/g);
-                console.log(target);
-                theRoll.target = parseInt(target, 10);
-            }
-            // set doubles
-            // To-do: add code for double 7+ (doub;les 7,8,9,and 10)
-            if (options[i].startsWith("db")) {
-                var double = options[i].match(tenOrSingleDigit);
-                double.forEach(function(item) {
-                    theRoll.doubleSet.add(parseInt(item, 10));
-                })
-            }
-            // set rerolls
-            if (options[i].startsWith("re")) {
-                var reroll = options[i].match(tenOrSingleDigit);
-                reroll.forEach(function(item) {
-                    theRoll.rerollSet.add(parseInt(item, 10));
-                })
-                set = theRoll.rerollSet;
-                // Stop infinite cascading reroll
-                if (set.has(1) &&
-                    set.has(2) &&
-                    set.has(3) &&
-                    set.has(4) &&
-                    set.has(5) &&
-                    set.has(6) &&
-                    set.has(7) &&
-                    set.has(8) &&
-                    set.has(9) &&
-                    set.has(10)
-                ) {
-                    return "Reroll every face? What are you trying to do, give me a headache?";
-                }
-            }
-            // set autosuccesses
-            if (options[i].startsWith("as")) {
-                var autosuccesses = options[i].match(/\d+/g);
-                theRoll.autosuccesses = parseInt(autosuccesses, 10);
-            }
-            // Don't double 10s of the /no10/ flag is active
-            if (options[i].startsWith("no10")) {
-                theRoll.doubleSet.delete(10);
-            	console.log("no10 flag found");
-            }
+    for (var i in options) {
+      // set target number
+      if (options[i].startsWith("tn")) {
+        // THIS IS A REALLY UGLY HOTFIX :-\
+        var target = options[i].match(/\d+/g);
+        console.log(target);
+        theRoll.target = parseInt(target, 10);
+      }
+      // set doubles
+      // To-do: add code for double 7+ (doub;les 7,8,9,and 10)
+      if (options[i].startsWith("db")) {
+        var double = options[i].match(tenOrSingleDigit);
+        double.forEach(function(item) {
+          theRoll.doubleSet.add(parseInt(item, 10));
+        })
+      }
+      // set rerolls
+      if (options[i].startsWith("re")) {
+        var reroll = options[i].match(tenOrSingleDigit);
+        reroll.forEach(function(item) {
+          theRoll.rerollSet.add(parseInt(item, 10));
+        })
+        set = theRoll.rerollSet;
+        // Stop infinite cascading reroll
+        if (set.has(1) &&
+        set.has(2) &&
+        set.has(3) &&
+        set.has(4) &&
+        set.has(5) &&
+        set.has(6) &&
+        set.has(7) &&
+        set.has(8) &&
+        set.has(9) &&
+        set.has(10)
+      ) {
+        return "Reroll every face? What are you trying to do, give me a headache?";
+      }
+    }
+    // set autosuccesses
+    if (options[i].startsWith("as")) {
+      var autosuccesses = options[i].match(/\d+/g);
+      theRoll.autosuccesses = parseInt(autosuccesses, 10);
+    }
+    // Don't double 10s of the /no10/ flag is active
+    if (options[i].startsWith("no10")) {
+      theRoll.doubleSet.delete(10);
+      console.log("no10 flag found");
+    }
 
   }
   checkForRerolls(theRoll.rolls, theRoll.rerollSet);
@@ -197,27 +193,26 @@ function cascade(rolls, rerollSet) {
 }
 
 function countSuccessesAndDisplayResults(theRoll) {
-    // Sort dice rolls
-    theRoll.rolls = theRoll.rolls.sort(function(a, b){return a-b});
-    console.log(theRoll)
-    // Count successes and format results
-    var successes = theRoll.autosuccesses;
-    for (var i in theRoll.rolls) {
-        if (theRoll.rolls[i] >= theRoll.target && theRoll.doubleSet.has(theRoll.rolls[i]) && theRoll.rerollSet.has(theRoll.rolls[i])) {
-            successes+=2;
-            theRoll.rolls[i] = "~~__**"+theRoll.rolls[i]+"**__~~";
-        } else if (theRoll.rolls[i] >= theRoll.target && theRoll.doubleSet.has(theRoll.rolls[i])) {
-            successes+=2;
-            theRoll.rolls[i] = "__**"+theRoll.rolls[i]+"**__";
-        } else if (theRoll.rolls[i] >= theRoll.target && theRoll.rerollSet.has(theRoll.rolls[i])) { // code for > target && reroll
-            successes+=1;
-            theRoll.rolls[i] = "~~**"+theRoll.rolls[i] + "**~~";
-        } else if (theRoll.rolls[i] >= theRoll.target) {
-            successes+=1;
-            theRoll.rolls[i] = "**"+theRoll.rolls[i]+"**";
-        } else if (theRoll.rerollSet.has(theRoll.rolls[i])) {
-            theRoll.rolls[i] = "~~"+theRoll.rolls[i]+"~~";
-        }
+  // Sort dice rolls
+  theRoll.rolls = theRoll.rolls.sort(function(a, b){return a-b});
+  console.log(theRoll)
+  // Count successes and format results
+  var successes = theRoll.autosuccesses;
+  for (var i in theRoll.rolls) {
+    if (theRoll.rolls[i] >= theRoll.target && theRoll.doubleSet.has(theRoll.rolls[i]) && theRoll.rerollSet.has(theRoll.rolls[i])) {
+      successes+=2;
+      theRoll.rolls[i] = "~~__**"+theRoll.rolls[i]+"**__~~";
+    } else if (theRoll.rolls[i] >= theRoll.target && theRoll.doubleSet.has(theRoll.rolls[i])) {
+      successes+=2;
+      theRoll.rolls[i] = "__**"+theRoll.rolls[i]+"**__";
+    } else if (theRoll.rolls[i] >= theRoll.target && theRoll.rerollSet.has(theRoll.rolls[i])) { // code for > target && reroll
+      successes+=1;
+      theRoll.rolls[i] = "~~**"+theRoll.rolls[i] + "**~~";
+    } else if (theRoll.rolls[i] >= theRoll.target) {
+      successes+=1;
+      theRoll.rolls[i] = "**"+theRoll.rolls[i]+"**";
+    } else if (theRoll.rerollSet.has(theRoll.rolls[i])) {
+      theRoll.rolls[i] = "~~"+theRoll.rolls[i]+"~~";
     }
   }
   console.log(theRoll.rolls);
@@ -225,8 +220,7 @@ function countSuccessesAndDisplayResults(theRoll) {
 }
 
 
-credentials = require("./token.js");
-mybot.login(credentials.token);
+
 
 
 // ROLE MANAGEMENT
@@ -279,3 +273,6 @@ function changeRoles(message) {
     })
   }
 }
+
+credentials = require("./token.js");
+mybot.login(credentials.token);
