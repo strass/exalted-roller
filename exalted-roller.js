@@ -9,12 +9,12 @@ mybot.on('ready', () => {
 })
 
 // Look for messages starting with roll
-mybot.on('message', function (message) {
+mybot.on('message', message => {
   if (message.content.startsWith(rerollString)) {
-    mybot.reply(message, parseMessage(message))
+    message.reply(parseMessage(message))
   }
   if (message.content.startsWith(roleString)) {
-    mybot.reply(message, changeRoles(message))
+    message.reply(changeRoles(message))
   }
 })
 
@@ -218,7 +218,7 @@ function countSuccessesAndDisplayResults (theRoll) {
 
 // ROLE MANAGEMENT
 function changeRoles (message) {
-  let trueinput = message.split(' ')
+  var trueinput = message.split(' ')
   if (trueinput[0] === '!role') {
     const availableroles = ['1e', '2e', '3e', 'Godbound', 'LFG', 'Member', 'LFP', 'Storytellers', 'Players', 'Voice or Text', 'Voice Only', 'Text Only']
     var rolestotoggle = []
