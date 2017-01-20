@@ -1,3 +1,5 @@
+// start -l roll.log -a -o out.log -a -e err.log -a exalted-roller.js
+
 const Discord = require('discord.js')
 const mybot = new Discord.Client()
 
@@ -11,7 +13,7 @@ mybot.on('ready', () => {
 // Look for messages starting with roll
 mybot.on('message', message => {
   if (message.content.startsWith(rerollString)) {
-    message.reply(parseMessage(message))
+    message.reply(parseMessage(message.content))
   }
   if (message.content.startsWith(roleString)) {
     message.reply(changeRoles(message))
@@ -218,8 +220,6 @@ function countSuccessesAndDisplayResults (theRoll) {
 
 // ROLE MANAGEMENT
 function changeRoles (message) {
-  var trueinput = message.split(' ')
-  if (trueinput[0] === '!role') {
     const availableroles = ['1e', '2e', '3e', 'Godbound', 'LFG', 'Member', 'LFP', 'Storytellers', 'Players', 'Voice or Text', 'Voice Only', 'Text Only']
     var rolestotoggle = []
     var newroles = []
@@ -264,7 +264,6 @@ function changeRoles (message) {
         message.channel.sendMessage(nickname + ' tags ' + flavortext)
       }
     })
-  }
 }
 
 const credentials = require('./token.js')
