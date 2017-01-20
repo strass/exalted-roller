@@ -218,7 +218,7 @@ function countSuccessesAndDisplayResults (theRoll) {
 
 // ROLE MANAGEMENT
 function changeRoles (message) {
-  let trueinput = message.split(' ')
+  var trueinput = message.split(' ')
   if (trueinput[0] === '!role') {
     const availableroles = ['1e', '2e', '3e', 'Godbound', 'LFG', 'Member', 'LFP', 'Storytellers', 'Players', 'Voice or Text', 'Voice Only', 'Text Only']
     var rolestotoggle = []
