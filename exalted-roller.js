@@ -219,6 +219,7 @@ function countSuccessesAndDisplayResults (theRoll) {
 }
 
 // ROLE MANAGEMENT
+// TODO: restrict to Exalted Gaming server, turn off caps sensitivity
 function changeRoles (message) {
     const availableroles = ['1e', '2e', '3e', 'Godbound', 'LFG', 'Member', 'LFP', 'Storytellers', 'Players', 'Voice or Text', 'Voice Only', 'Text Only']
     var rolestotoggle = []
