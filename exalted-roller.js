@@ -16,7 +16,7 @@ mybot.on('message', message => {
     message.reply(parseMessage(message.content))
   }
   if (message.content.startsWith(roleString)) {
-    message.reply(changeRoles(message))
+    message.reply(changeRoles(message), "(bot sick, come back soon)")
   }
 })
 
