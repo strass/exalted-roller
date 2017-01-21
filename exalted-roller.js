@@ -1,5 +1,7 @@
 // start -l roll.log -a -o out.log -a -e err.log -a exalted-roller.js
 "use strict";
+console.log("starting")
+
 const Discord = require('discord.js')
 const mybot = new Discord.Client()
 
@@ -271,3 +273,6 @@ function changeRoles (message) {
 
 const credentials = require('./token.js')
 mybot.login(credentials.token)
+
+console.log("finished load")
+console.log(mybot)
