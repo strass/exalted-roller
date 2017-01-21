@@ -5,8 +5,7 @@
   "main": "exalted-roller.js",
   "dependencies": {
     "discord.js": "^8.2.0",
-    "simple-text-parser": "^1.0.0",
-    "uws": "^0.12.0"
+    "simple-text-parser": "^1.0.0"
   },
   "devDependencies": {
     "eslint": "^3.13.1",
