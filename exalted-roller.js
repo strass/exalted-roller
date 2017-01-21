@@ -147,29 +147,29 @@ function parseMessage (message) {
         set.has(9) &&
         set.has(10)
       ) {
-        return 'Reroll every face? What are you trying to do, give me a headache?'
+          return 'Reroll every face? What are you trying to do, give me a headache?'
+        }
+      }
+    // set autosuccesses
+      if (options[i].startsWith('as')) {
+        var autosuccesses = options[i].match(/\d+/g)
+        theRoll.autosuccesses = parseInt(autosuccesses, 10)
+      }
+    // Don't double 10s of the /no10/ flag is active
+      if (options[i].startsWith('no10')) {
+        theRoll.doubleSet.delete(10)
+        console.log('no10 flag found')
       }
     }
-    // set autosuccesses
-    if (options[i].startsWith('as')) {
-      var autosuccesses = options[i].match(/\d+/g)
-      theRoll.autosuccesses = parseInt(autosuccesses, 10)
-    }
-    // Don't double 10s of the /no10/ flag is active
-    if (options[i].startsWith('no10')) {
-      theRoll.doubleSet.delete(10)
-      console.log('no10 flag found')
-    }
-  }
-  checkForRerolls(theRoll.rolls, theRoll.rerollSet)
+    checkForRerolls(theRoll.rolls, theRoll.rerollSet)
 
   // Pass theRoll through countSuccessesAndDisplayResults
-  return countSuccessesAndDisplayResults(theRoll)
-} else {
+    return countSuccessesAndDisplayResults(theRoll)
+  } else {
   // Bad syntax handling
   // To-do: add better support here
-  return "I can't find any numbers after roll. Syntax: .roll/tn#/db#s/re#s/as#/no10 8d10"
-}
+    return "I can't find any numbers after roll. Syntax: .roll/tn#/db#s/re#s/as#/no10 8d10"
+  }
 }
 
 // Check whether any of our roll values are contained in our rerollSet
@@ -237,7 +237,7 @@ function changeRoles (message) {
   if (message.guild && (rolestotoggle.length > 0)) {
     var roles = message.guild.roles.array()
     // var originalroles = message.member.roles // never used?
-    roles.forEach(function(role) {
+    roles.forEach(function (role) {
       if (message.member.roles.has(role.id)) {
         if (rolestotoggle.includes(role.name)) {
           console.log('Removed ' + role.name + ' for ' + message.author.username)
@@ -255,15 +255,15 @@ function changeRoles (message) {
     })
   }
 
-  var nickname = 'User'
-  if (!message.member.nickname) {
-    nickname = message.author.username
-  } else {
-    nickname = message.member.nickname
-  }
+  // var nickname = 'User' // nicknames not used
+  // if (!message.member.nickname) {
+  //   nickname = message.author.username
+  // } else {
+  //   nickname = message.member.nickname
+  // }
   if (newroles.length > 0) {
     message.member.setRoles(newroles)
-    return "tags:", flavortext
+    return 'tags:' + flavortext
   }
 }
 
