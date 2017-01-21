@@ -5,7 +5,6 @@
   "main": "exalted-roller.js",
   "dependencies": {
     "discord.js": "^8.2.0",
-    "erlpack": "github:hammerandchisel/erlpack",
     "simple-text-parser": "^1.0.0",
     "uws": "^0.12.0"
   },

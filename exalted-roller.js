@@ -1,5 +1,5 @@
 // start -l roll.log -a -o out.log -a -e err.log -a exalted-roller.js
-
+"use strict";
 const Discord = require('discord.js')
 const mybot = new Discord.Client()
 
