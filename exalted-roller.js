@@ -4,9 +4,12 @@ console.log("starting")
 
 const Discord = require('discord.js')
 const mybot = new Discord.Client()
+const credentials = require('./token.js')
+mybot.login(credentials.token)
 
 const rerollString = '.roll'
 const roleString = '!role'
+
 
 mybot.on('ready', () => {
   console.log('I am ready!')
@@ -271,8 +274,7 @@ function changeRoles (message) {
   }
 }
 
-const credentials = require('./token.js')
-mybot.login(credentials.token)
+
 
 console.log("finished load")
 console.log(mybot)
