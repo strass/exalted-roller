@@ -221,7 +221,7 @@ function countSuccessesAndDisplayResults (theRoll) {
 // ROLE MANAGEMENT
 // TODO: restrict to Exalted Gaming server, turn off caps sensitivity
 function changeRoles (message) {
-  const availableroles = ['1e', '2e', '3e', 'Godbound', 'LFG', 'Member', 'LFP', 'Storytellers', 'Players', 'Voice or Text', 'Voice Only', 'Text Only']
+  var availableroles = ['1e', '2e', '3e', 'Godbound', 'LFG', 'Member', 'LFP', 'Storytellers', 'Players', 'Voice or Text', 'Voice Only', 'Text Only']
   var rolestotoggle = []
   var newroles = []
   var flavortext = ''
@@ -232,28 +232,28 @@ function changeRoles (message) {
     if ((toggletag) && (availableroles.includes(toggletag[1]))) {
       rolestotoggle.push(toggletag[1])
     }
-
-    if (message.guild && (rolestotoggle.length > 0)) {
-      var roles = message.guild.roles.array()
-      // var originalroles = message.member.roles // never used?
-      roles.forEach(function (role) {
-        if (message.member.roles.has(role.id)) {
-          if (rolestotoggle.includes(role.name)) {
-            console.log('Removed ' + role.name + ' for ' + message.author.username)
-            flavortext += '-' + role.name + ' '
-          } else {
-            newroles.push(role.id)
-          }
-        } else {
-          if (rolestotoggle.includes(role.name)) {
-            console.log('Added ' + role.name + ' for ' + message.author.username)
-            newroles.push(role.id)
-            flavortext += '+' + role.name + ' '
-          }
-        }
-      })
-    }
   })
+
+  if (message.guild && (rolestotoggle.length > 0)) {
+    var roles = message.guild.roles.array()
+    // var originalroles = message.member.roles // never used?
+    roles.forEach(function(role) {
+      if (message.member.roles.has(role.id)) {
+        if (rolestotoggle.includes(role.name)) {
+          console.log('Removed ' + role.name + ' for ' + message.author.username)
+          flavortext += '-' + role.name + ' '
+        } else {
+          newroles.push(role.id)
+        }
+      } else {
+        if (rolestotoggle.includes(role.name)) {
+          console.log('Added ' + role.name + ' for ' + message.author.username)
+          newroles.push(role.id)
+          flavortext += '+' + role.name + ' '
+        }
+      }
+    })
+  }
 
   var nickname = 'User'
   if (!message.member.nickname) {
