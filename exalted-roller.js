@@ -16,7 +16,7 @@ mybot.on('message', message => {
     message.reply(parseMessage(message.content))
   }
   if (message.content.startsWith(roleString)) {
-    message.reply(changeRoles(message), "(bot sick, come back soon)")
+    message.reply(changeRoles(message))
   }
 })
 
@@ -253,6 +253,8 @@ function changeRoles (message) {
         }
       }
     })
+  } else {
+    return 'No toggleable roles found'
   }
 
   // var nickname = 'User' // nicknames not used
