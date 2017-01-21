@@ -1,29 +1,33 @@
 {
-  "name": "exalted-roller",
-  "version": "1.0.0",
-  "description": "dice roller for exalted",
+  "name": "d10",
+  "version": "2.0.0",
+  "description": "dice roller for exalted 3rd edition",
+  "homepage": "https://github.com/ZakStrassberg/exalted-roller",
+  "author": {
+    "name": "Zak Strassberg",
+    "email": "zakstrassberg@gmail.com",
+    "url": "zakstrassberg.com"
+  },
   "main": "exalted-roller.js",
+  "keywords": [
+    "discord",
+    "bot",
+    "dice",
+    "gaming"
+  ],
+  "scripts": {
+    "start": "node exalted-roller.js"
+  },
+  "repository": "git@github.com:ZakStrassberg/exalted-roller.git",
+  "license": "unlicense",
   "dependencies": {
-    "discord.js": "^8.2.0",
-    "simple-text-parser": "^1.0.0"
+    "clapp": "^1.1.1",
+    "discord.js": "^11.0.0"
   },
   "devDependencies": {
-    "eslint": "^3.13.1",
-    "eslint-config-standard": "^6.2.1",
-    "eslint-plugin-promise": "^3.4.0",
-    "eslint-plugin-standard": "^2.0.1"
-  },
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/ZakStrassberg/exalted-roller.git"
-  },
-  "author": "Zak Strassberg",
-  "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/ZakStrassberg/exalted-roller/issues"
-  },
-  "homepage": "https://github.com/ZakStrassberg/exalted-roller#readme"
+      "eslint": "^3.13.1",
+      "eslint-config-standard": "^6.2.1",
+      "eslint-plugin-promise": "^3.4.0",
+      "eslint-plugin-standard": "^2.0.1"
+    }
 }

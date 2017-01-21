@@ -1,66 +1,40 @@
-// start -l roll.log -a -o out.log -a -e err.log -a exalted-roller.js
-"use strict";
-console.log("starting")
-
-const Discord = require('discord.js')
-const mybot = new Discord.Client()
+'use strict';
+const Clapp   = require('./modules/clapp-discord');
+const Discord = require('discord.js');
+const bot     = new Discord.Client();
 const credentials = require('./token.js')
-mybot.login(credentials.token)
 
-const rerollString = '.roll'
-const roleString = '!role'
+var app = new Clapp.App({
+  name: 'd10',
+  desc: 'A dice rolling bot for Exalted 3rd edition',
+  prefix: ".",
+  version: "2.0",
+  onReply: (msg, context) => {
+    // Fired when input is needed to be shown to the user.
 
-
-mybot.on('ready', () => {
-  console.log('I am ready!')
-})
-
-// Look for messages starting with roll
-mybot.on('message', message => {
-  if (message.content.startsWith(rerollString)) {
-    message.reply(parseMessage(message.content))
+    // context.msg.reply('\n' + msg).then(bot_response => {
+    //   if (cfg.deleteAfterReply.enabled) {
+    //     context.msg.delete(cfg.deleteAfterReply.time)
+    //       .then(msg => console.log(`Deleted message from ${msg.author}`))
+    //       .catch(console.log);
+    //     bot_response.delete(cfg.deleteAfterReply.time)
+    //       .then(msg => console.log(`Deleted message from ${msg.author}`))
+    //       .catch(console.log);
+    //   }
+    // });
   }
-  if (message.content.startsWith(roleString)) {
-    message.reply(changeRoles(message))
+});
+
+bot.on('message', msg => {
+  if (msg.content.startsWith('.roll')) {
+    msg.reply(parseMessage(msg.content))
   }
-})
 
-// A quick guide to Exalted rolling:
-//
-// Roll a pool of d10, each individual dice showing
-// a number greater than the target number (7 by default)
-// generates a success. 10's generate two successes. If
-// you roll more successes than the difficulty of an action,
-// you succeed. To roll n dice, simply type `.roll n`.
-//
-// Some powers let you change how you roll:i
-//
-// * The simplest is an autosucces. Each autosuccess adds
-// 1 success to the result of your roll. Autosuccess
-// can be added with the \as# command, `.roll\as1 4`
-// would roll 4 dice and then add an additional success
-// to the result.
-// * The default target number is 7. All results greater than
-// or equal to 7 will be rerolled. The target number can be
-// changed with \tn. For example `.roll\tn6 #` will roll #
-// dice, generating a success for each number greater than or
-// euqal to 6.
-// * Doubles generate twice the number of successes. If you
-// are rolling double 9's, each 9 in your pool would add two
-// successes instead of one. `.roll/db789 #` would roll # dice
-// and double the successes of 7, 8, 9, and 10 (since 10 is
-// doubled by default). If you don't want to double your 10s,
-// use /no10 in the roll: `.roll/no10 #`.
-// * Rerolls faces are rerolled after recording successes.
-// `.roll\re56 8` will roll 8 dice, rerolling 5's and 6's.
-// These cascade, meaning that if another 5 or 6 is rerolled,
-// it will be rerolled as well.
-//
-// Text output: D10 bot will reply with the dice you rolled
-// and computes the number of successes. Successes are bolded,
-// doubles are underlined, and rerolls have strikethrough.
+  if (msg.content.startsWith('.role')) {
+    msg.reply(changeRoles(msg))
+  }
+});
 
-// Roll object constructor
 function Roll (numDice) {
   var roll = function (numDice) {
     var rolls = []
@@ -270,11 +244,10 @@ function changeRoles (message) {
   // }
   if (newroles.length > 0) {
     message.member.setRoles(newroles)
-    return 'tags:' + flavortext
+    return 'tags: ' + flavortext
   }
 }
 
-
-
-console.log("finished load")
-console.log(mybot)
+bot.login(credentials.token).then(() => {
+  console.log('Running!');
+});
