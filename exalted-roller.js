@@ -4,6 +4,8 @@ const Discord = require('discord.js');
 const bot     = new Discord.Client();
 const credentials = require('./token.js')
 
+console.log('starting dicebot');
+
 var app = new Clapp.App({
   name: 'd10',
   desc: 'A dice rolling bot for Exalted 3rd edition',
@@ -103,14 +105,14 @@ function parseMessage (message) {
       // To-do: add code for double 7+ (doub;les 7,8,9,and 10)
       if (options[i].startsWith('db')) {
         var double = options[i].match(tenOrSingleDigit)
-        double.forEach(function (item) {
+        double && double.forEach(function (item) {
           theRoll.doubleSet.add(parseInt(item, 10))
         })
       }
       // set rerolls
       if (options[i].startsWith('re')) {
         var reroll = options[i].match(tenOrSingleDigit)
-        reroll.forEach(function (item) {
+        reroll && reroll.forEach(function (item) {
           theRoll.rerollSet.add(parseInt(item, 10))
         })
         let set = theRoll.rerollSet

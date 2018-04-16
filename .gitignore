@@ -3,3 +3,7 @@ token.js
 
 # Dependencies
 node_modules
+
+# Logs
+err.log
+out.log
