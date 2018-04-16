@@ -229,9 +229,8 @@ function changeRoles(message) {
     "LFP",
     "Storytellers",
     "Players",
-    "Voice or Text",
-    "Voice Only",
-    "Text Only"
+    "Voice",
+    "Text"
   ];
   var rolestotoggle = [];
   var newroles = [];
