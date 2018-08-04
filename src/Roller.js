@@ -21,11 +21,12 @@ export const d10 = () => sample(range(1, 10));
  * @param {object} config - a config for settings pertinent to successes
  * @param {number} [config.targetNumber=7] - target number for the roll
  * @param {number} [config.double=10] - double successes over this number
+ * @param {number} [config.autosuccesses=0] - successes to add to roll
  * @returns {number} the totall successes rolled
  */
 export const countSuccesses = (
   roll,
-  { targetNumber = 7, double = 10 } = {}
+  { targetNumber = 7, double = 10, autosuccesses = 0 } = {}
 ) => {
   if (roll === undefined || (!isNumber(roll) && !isArray(roll))) {
     throw new Error("roll is required (die or array of dice)");
@@ -43,7 +44,7 @@ export const countSuccesses = (
         throw new Error("One of the values in roll array out of 1-10 range");
       return acc + (r >= targetNumber ? (r >= double ? 2 : 1) : 0);
     },
-    0
+    autosuccesses
   );
 };
 
@@ -105,13 +106,24 @@ export const reroll = (
  * @param {number} [config.double=10] double successes over this number
  * @param {number[]} [config.rerollArray=[]] faces to reroll
  * @param {boolean} [config.cascade=true] whether rerolls should cascade
+ * @param {boolean} [config.autosuccesses=0] roll autosuccesses
  */
 export const roll = (numDice, config) => {
-  const { targetNumber, double = 10, rerollArray = [], cascade = true } =
+  const {
+    targetNumber,
+    double = 10,
+    rerollArray = [],
+    cascade = true,
+    autosuccesses = 0
+  } =
     config || {};
   const theRoll = rollDice(numDice);
   const result = reroll(theRoll, { rerollArray, append: true, cascade });
-  const successes = countSuccesses(theRoll, { targetNumber, double });
+  const successes = countSuccesses(theRoll, {
+    targetNumber,
+    double,
+    autosuccesses
+  });
 
   return {
     result,

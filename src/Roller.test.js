@@ -31,7 +31,7 @@ describe("rollDice", () => {
   it("errors", () => {
     expect(() => rollDice()).toThrow();
     expect(() => rollDice([])).toThrow();
-    expect(() => rollDice('a')).toThrow();
+    expect(() => rollDice("a")).toThrow();
     expect(() => rollDice(-1)).toThrow();
     expect(() => rollDice(false)).toThrow();
   });
@@ -96,6 +96,7 @@ describe("countSuccesses", () => {
       expect(countSuccesses([9], { targetNumber: 5 })).toBe(1);
       expect(countSuccesses([10], { targetNumber: 5 })).toBe(2);
     });
+
     it("works with large rolls", () => {
       expect(countSuccesses([1, 1, 1, 3, 3, 6, 6], { targetNumber: 5 })).toBe(
         2
@@ -109,16 +110,6 @@ describe("countSuccesses", () => {
       expect(countSuccesses([1, 4, 5, 6, 6, 10, 10], { targetNumber: 5 })).toBe(
         7
       );
-    });
-    it("errors", () => {
-      expect(() => countSuccesses(1, { targetNumber: "a" })).toThrow();
-      expect(() => countSuccesses(1, { targetNumber: [] })).toThrow();
-      expect(() => countSuccesses(1, { targetNumber: null })).toThrow();
-      expect(() => countSuccesses(1, { targetNumber: false })).toThrow();
-      expect(() => countSuccesses(1, { double: "a" })).toThrow();
-      expect(() => countSuccesses(1, { double: [] })).toThrow();
-      expect(() => countSuccesses(1, { double: null })).toThrow();
-      expect(() => countSuccesses(1, { double: false })).toThrow();
     });
   });
   describe("can set doubles", () => {
@@ -153,47 +144,154 @@ describe("countSuccesses", () => {
       expect(countSuccesses([1, 4, 5, 6, 6, 10, 10], { double: 9 })).toBe(4);
     });
   });
-  describe("can set target number and doubles", () => {
+  describe("autosuccesses", () => {
     it("works with number input", () => {
-      expect(countSuccesses(1, { double: 9, targetNumber: 5 })).toBe(0);
-      expect(countSuccesses(2, { double: 9, targetNumber: 5 })).toBe(0);
-      expect(countSuccesses(3, { double: 9, targetNumber: 5 })).toBe(0);
-      expect(countSuccesses(4, { double: 9, targetNumber: 5 })).toBe(0);
-      expect(countSuccesses(5, { double: 9, targetNumber: 5 })).toBe(1);
-      expect(countSuccesses(6, { double: 9, targetNumber: 5 })).toBe(1);
-      expect(countSuccesses(7, { double: 9, targetNumber: 5 })).toBe(1);
-      expect(countSuccesses(8, { double: 9, targetNumber: 5 })).toBe(1);
-      expect(countSuccesses(9, { double: 9, targetNumber: 5 })).toBe(2);
-      expect(countSuccesses(10, { double: 9, targetNumber: 5 })).toBe(2);
+      expect(countSuccesses(1, { autosuccesses: 3 })).toBe(0 + 3);
+      expect(countSuccesses(2, { autosuccesses: 3 })).toBe(0 + 3);
+      expect(countSuccesses(3, { autosuccesses: 3 })).toBe(0 + 3);
+      expect(countSuccesses(4, { autosuccesses: 3 })).toBe(0 + 3);
+      expect(countSuccesses(5, { autosuccesses: 3 })).toBe(0 + 3);
+      expect(countSuccesses(6, { autosuccesses: 3 })).toBe(0 + 3);
+      expect(countSuccesses(7, { autosuccesses: 3 })).toBe(1 + 3);
+      expect(countSuccesses(8, { autosuccesses: 3 })).toBe(1 + 3);
+      expect(countSuccesses(9, { autosuccesses: 3 })).toBe(1 + 3);
+      expect(countSuccesses(10, { autosuccesses: 3 })).toBe(2 + 3);
     });
     it("works with number array input", () => {
-      expect(countSuccesses([1], { double: 9, targetNumber: 5 })).toBe(0);
-      expect(countSuccesses([2], { double: 9, targetNumber: 5 })).toBe(0);
-      expect(countSuccesses([3], { double: 9, targetNumber: 5 })).toBe(0);
-      expect(countSuccesses([4], { double: 9, targetNumber: 5 })).toBe(0);
-      expect(countSuccesses([5], { double: 9, targetNumber: 5 })).toBe(1);
-      expect(countSuccesses([6], { double: 9, targetNumber: 5 })).toBe(1);
-      expect(countSuccesses([7], { double: 9, targetNumber: 5 })).toBe(1);
-      expect(countSuccesses([8], { double: 9, targetNumber: 5 })).toBe(1);
-      expect(countSuccesses([9], { double: 9, targetNumber: 5 })).toBe(2);
-      expect(countSuccesses([10], { double: 9, targetNumber: 5 })).toBe(2);
+      expect(countSuccesses([1], { autosuccesses: 3 })).toBe(0 + 3);
+      expect(countSuccesses([2], { autosuccesses: 3 })).toBe(0 + 3);
+      expect(countSuccesses([3], { autosuccesses: 3 })).toBe(0 + 3);
+      expect(countSuccesses([4], { autosuccesses: 3 })).toBe(0 + 3);
+      expect(countSuccesses([5], { autosuccesses: 3 })).toBe(0 + 3);
+      expect(countSuccesses([6], { autosuccesses: 3 })).toBe(0 + 3);
+      expect(countSuccesses([7], { autosuccesses: 3 })).toBe(1 + 3);
+      expect(countSuccesses([8], { autosuccesses: 3 })).toBe(1 + 3);
+      expect(countSuccesses([9], { autosuccesses: 3 })).toBe(1 + 3);
+      expect(countSuccesses([10], { autosuccesses: 3 })).toBe(2 + 3);
+    });
+    it("works with large rolls", () => {
+      expect(countSuccesses([1, 1, 1, 3, 3, 6, 6], { autosuccesses: 3 })).toBe(
+        0 + 3
+      );
+      expect(countSuccesses([1, 5, 6, 7, 7, 9, 10], { autosuccesses: 3 })).toBe(
+        5 + 3
+      );
+      expect(countSuccesses([1, 5, 6, 6, 7, 9, 10], { autosuccesses: 3 })).toBe(
+        4 + 3
+      );
+      expect(
+        countSuccesses([1, 4, 5, 6, 6, 10, 10], { autosuccesses: 3 })
+      ).toBe(4 + 3);
+    });
+  });
+  describe("can set target number + doubles + autosuccesses", () => {
+    it("works with number input", () => {
+      expect(
+        countSuccesses(1, { double: 9, targetNumber: 5, autosuccesses: 2 })
+      ).toBe(0 + 2);
+      expect(
+        countSuccesses(2, { double: 9, targetNumber: 5, autosuccesses: 2 })
+      ).toBe(0 + 2);
+      expect(
+        countSuccesses(3, { double: 9, targetNumber: 5, autosuccesses: 2 })
+      ).toBe(0 + 2);
+      expect(
+        countSuccesses(4, { double: 9, targetNumber: 5, autosuccesses: 2 })
+      ).toBe(0 + 2);
+      expect(
+        countSuccesses(5, { double: 9, targetNumber: 5, autosuccesses: 2 })
+      ).toBe(1 + 2);
+      expect(
+        countSuccesses(6, { double: 9, targetNumber: 5, autosuccesses: 2 })
+      ).toBe(1 + 2);
+      expect(
+        countSuccesses(7, { double: 9, targetNumber: 5, autosuccesses: 2 })
+      ).toBe(1 + 2);
+      expect(
+        countSuccesses(8, { double: 9, targetNumber: 5, autosuccesses: 2 })
+      ).toBe(1 + 2);
+      expect(
+        countSuccesses(9, { double: 9, targetNumber: 5, autosuccesses: 2 })
+      ).toBe(2 + 2);
+      expect(
+        countSuccesses(10, { double: 9, targetNumber: 5, autosuccesses: 2 })
+      ).toBe(2 + 2);
+    });
+    it("works with number array input", () => {
+      expect(
+        countSuccesses([1], { double: 9, targetNumber: 5, autosuccesses: 2 })
+      ).toBe(0 + 2);
+      expect(
+        countSuccesses([2], { double: 9, targetNumber: 5, autosuccesses: 2 })
+      ).toBe(0 + 2);
+      expect(
+        countSuccesses([3], { double: 9, targetNumber: 5, autosuccesses: 2 })
+      ).toBe(0 + 2);
+      expect(
+        countSuccesses([4], { double: 9, targetNumber: 5, autosuccesses: 2 })
+      ).toBe(0 + 2);
+      expect(
+        countSuccesses([5], { double: 9, targetNumber: 5, autosuccesses: 2 })
+      ).toBe(1 + 2);
+      expect(
+        countSuccesses([6], { double: 9, targetNumber: 5, autosuccesses: 2 })
+      ).toBe(1 + 2);
+      expect(
+        countSuccesses([7], { double: 9, targetNumber: 5, autosuccesses: 2 })
+      ).toBe(1 + 2);
+      expect(
+        countSuccesses([8], { double: 9, targetNumber: 5, autosuccesses: 2 })
+      ).toBe(1 + 2);
+      expect(
+        countSuccesses([9], { double: 9, targetNumber: 5, autosuccesses: 2 })
+      ).toBe(2 + 2);
+      expect(
+        countSuccesses([10], { double: 9, targetNumber: 5, autosuccesses: 2 })
+      ).toBe(2 + 2);
     });
     it("works with large rolls", () => {
       expect(
-        countSuccesses([1, 1, 1, 3, 3, 6, 6], { double: 9, targetNumber: 5 })
-      ).toBe(2);
+        countSuccesses([1, 1, 1, 3, 3, 6, 6], {
+          double: 9,
+          targetNumber: 5,
+          autosuccesses: 2
+        })
+      ).toBe(2 + 2);
       expect(
-        countSuccesses([1, 5, 6, 7, 7, 9, 10], { double: 9, targetNumber: 5 })
-      ).toBe(8);
+        countSuccesses([1, 5, 6, 7, 7, 9, 10], {
+          double: 9,
+          targetNumber: 5,
+          autosuccesses: 2
+        })
+      ).toBe(8 + 2);
       expect(
-        countSuccesses([1, 5, 6, 6, 7, 9, 10], { double: 9, targetNumber: 5 })
-      ).toBe(8);
+        countSuccesses([1, 5, 6, 6, 7, 9, 10], {
+          double: 9,
+          targetNumber: 5,
+          autosuccesses: 2
+        })
+      ).toBe(8 + 2);
       expect(
-        countSuccesses([1, 4, 5, 6, 6, 10, 10], { double: 9, targetNumber: 5 })
-      ).toBe(7);
+        countSuccesses([1, 4, 5, 6, 6, 10, 10], {
+          double: 9,
+          targetNumber: 5,
+          autosuccesses: 2
+        })
+      ).toBe(7 + 2);
     });
   });
+
   describe("errors given incorrect input", () => {
+    it("errors with bad targetNumbers and doubles", () => {
+      expect(() => countSuccesses(1, { targetNumber: "a" })).toThrow();
+      expect(() => countSuccesses(1, { targetNumber: [] })).toThrow();
+      expect(() => countSuccesses(1, { targetNumber: null })).toThrow();
+      expect(() => countSuccesses(1, { targetNumber: false })).toThrow();
+      expect(() => countSuccesses(1, { double: "a" })).toThrow();
+      expect(() => countSuccesses(1, { double: [] })).toThrow();
+      expect(() => countSuccesses(1, { double: null })).toThrow();
+      expect(() => countSuccesses(1, { double: false })).toThrow();
+    });
     it("shouldn't take no input", () => {
       expect(() => countSuccesses()).toThrow();
       expect(() => countSuccesses(["a"])).toThrow();
@@ -280,6 +378,15 @@ describe("roll", () => {
         rolled.result[0] === 10 ? 2 : rolled.result[0] >= 7 ? 1 : 0
       );
       expect(rolled.diceRolled).toBe(1);
+    });
+  });
+  it("takes autosuccesses", () => {
+    expect(roll(0, { autosuccesses: 2 })).toEqual({
+      result: [],
+      botch: false,
+      numDice: 0,
+      successes: 2,
+      diceRolled: 0
     });
   });
 });
