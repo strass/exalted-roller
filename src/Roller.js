@@ -121,3 +121,5 @@ export const roll = (numDice, config) => {
     botch: successes === 0 && result.includes(1)
   };
 };
+
+export default roll;
