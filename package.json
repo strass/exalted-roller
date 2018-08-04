@@ -16,7 +16,9 @@
     "gaming"
   ],
   "scripts": {
-    "start": "node exalted-roller.js"
+    "start": "node exalted-roller.js",
+    "build": "rollup -c",
+    "test": "jest src"
   },
   "repository": "git@github.com:ZakStrassberg/exalted-roller.git",
   "license": "unlicense",
@@ -24,5 +26,14 @@
     "clapp": "^1.1.1",
     "discord.js": "^11.0.0",
     "minimist-string": "^1.0.2"
+  },
+  "devDependencies": {
+    "@babel/cli": "^7.0.0-beta.56",
+    "@babel/core": "^7.0.0-beta.56",
+    "@babel/preset-env": "^7.0.0-beta.56",
+    "babel-core": "^7.0.0-0",
+    "babel-jest": "^23.4.2",
+    "jest": "^23.4.2",
+    "regenerator-runtime": "^0.12.1"
   }
 }
