@@ -11,4 +11,6 @@ out.log
 # yarn
 yarn-error.log
 
+# folders
 coverage/
+lib/
