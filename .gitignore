@@ -7,3 +7,6 @@ node_modules
 # Logs
 err.log
 out.log
+
+# yarn
+yarn-error.log
