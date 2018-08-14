@@ -233,11 +233,11 @@ function changeRoles(message) {
     "Players",
     "Voice",
     "Text"
-  ];
+  ].map(r => r.toLowerCase());
   var rolestotoggle = [];
   var newroles = [];
   var flavortext = "";
-  var basetags = message.content.split("(");
+  var basetags = message.content.split("(").map(m => m.toLowerCase());
   basetags.shift();
   basetags.forEach(function(potentialtag) {
     var toggletag = potentialtag.match(/([a-z A-Z0-9',]+)/);
