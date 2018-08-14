@@ -237,11 +237,11 @@ function changeRoles(message) {
   var rolestotoggle = [];
   var newroles = [];
   var flavortext = "";
-  var basetags = message.content.split("(").map(m => m.toLowerCase());
+  var basetags = message.content.split("(");
   basetags.shift();
   basetags.forEach(function(potentialtag) {
     var toggletag = potentialtag.match(/([a-z A-Z0-9',]+)/);
-    if (toggletag && availableroles.includes(toggletag[1])) {
+    if (toggletag && availableroles.includes(toggletag[1].toLowerCase())) {
       rolestotoggle.push(toggletag[1]);
     }
   });
