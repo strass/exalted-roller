@@ -241,9 +241,11 @@ function changeRoles(message) {
   basetags.shift();
   basetags.forEach(function(potentialtag) {
     var toggletag = potentialtag.match(/([a-z A-Z0-9',]+)/);
-    console.log(toggletag[1]);
-    if (toggletag && availableroles.map(r => r.toLowerCase()).includes(toggletag[1].toLowerCase())) {
-      rolestotoggle.push(toggletag[1]);
+    if (toggletag) {
+      const index = availableroles.map(r => r.toLowerCase()).indexOf(toggletag[1].toLowerCase());
+      if (index >= 0) {
+        rolestotoggle.push(availableroles[index]);
+      }
     }
   });
 
