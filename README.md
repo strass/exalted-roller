@@ -18,22 +18,22 @@ Some powers let you change how you roll:i
 
 * The simplest is an autosucces. Each autosuccess adds
 1 success to the result of your roll. Autosuccess
-can be added with the \as# command, `.roll\as1 4`
+can be added with the `/as#` command, `.roll/as1 4`
 would roll 4 dice and then add an additional success
 to the result.
 * The default target number is 7. All results greater than
 or equal to 7 will be rerolled. The target number can be
-changed with \tn. For example `.roll\tn6 #` will roll #
+changed with `/tn`. For example `.roll/tn6 #` will roll #
 dice, generating a success for each number greater than or
 euqal to 6.
 * Doubles generate twice the number of successes. If you
 are rolling double 9's, each 9 in your pool would add two
-successes instead of one. `.roll\db789 #` would roll # dice
+successes instead of one. `.roll/db789 #` would roll # dice
 and double the successes of 7, 8, 9, and 10 (since 10 is
 doubled by default). If you don't want to double your 10s,
-use /no10 in the roll: `.roll\no10 #`.
+use /no10 in the roll: `.roll/no10 #`.
 * Rerolls faces are rerolled after recording successes.
-`.roll\re56 8` will roll 8 dice, rerolling 5's and 6's.
+`.roll/re56 8` will roll 8 dice, rerolling 5's and 6's.
 These cascade, meaning that if another 5 or 6 is rerolled,
 it will be rerolled as well.
 
@@ -48,6 +48,6 @@ inviting him to a channel you administrate.
 
 ## To-do:
 * ~~Better error handling~~ **added somewhat subpar error handling 2016-07-31 let's see if it's enough**
-* More helpful help (really any help feature at all)
+* ~~More helpful help (really any help feature at all)~~
 * ~~Option to not double 10's~~ **/no10 flag added2016-07-30**
 * Option to have /db7+ mean double 7, 8, 9, and 10
