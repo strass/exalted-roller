@@ -25,7 +25,7 @@ to the result.
 or equal to 7 will be rerolled. The target number can be
 changed with `/tn`. For example `.roll/tn6 #` will roll #
 dice, generating a success for each number greater than or
-euqal to 6.
+equal to 6.
 * Doubles generate twice the number of successes. If you
 are rolling double 9's, each 9 in your pool would add two
 successes instead of one. `.roll/db789 #` would roll # dice
@@ -36,6 +36,9 @@ use /no10 in the roll: `.roll/no10 #`.
 `.roll/re56 8` will roll 8 dice, rerolling 5's and 6's.
 These cascade, meaning that if another 5 or 6 is rerolled,
 it will be rerolled as well.
+* `/db#+` and `/re#+` can be used to double/reroll all rolls
+from # to 10. `.roll/db7+` would double the successes of
+7, 8, 9, and 10. This does not override no10.
 
 Text output: D10 bot will reply with the dice you rolled
 and computes the number of successes. Successes are bolded,
@@ -50,4 +53,4 @@ inviting him to a channel you administrate.
 * ~~Better error handling~~ **added somewhat subpar error handling 2016-07-31 let's see if it's enough**
 * ~~More helpful help (really any help feature at all)~~
 * ~~Option to not double 10's~~ **/no10 flag added2016-07-30**
-* Option to have /db7+ mean double 7, 8, 9, and 10
+* ~~Option to have /db7+ mean double 7, 8, 9, and 10~~
