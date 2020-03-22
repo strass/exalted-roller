@@ -75,7 +75,7 @@ function parseMessage(message) {
 
   // Some variables and shortcuts to use:
   var anyNumber = /^\d+/g;
-  var tenOrSingleDigit = /10|\d/g;
+  var tenOrSingleDigitOptionalPlus = /(10|\d)\+?/g;
 
   // If there's a number of dice at the end of the roll message...
   if (parsed[1].match(anyNumber)) {
@@ -101,18 +101,32 @@ function parseMessage(message) {
         theRoll.target = parseInt(target, 10);
       }
       // set doubles
-      // To-do: add code for double 7+ (doub;les 7,8,9,and 10)
       if (options[i].startsWith('db')) {
-        var double = options[i].match(tenOrSingleDigit)
+        var double = options[i].match(tenOrSingleDigitOptionalPlus)
         double && double.forEach(function (item) {
-          theRoll.doubleSet.add(parseInt(item, 10))
+          if (item.includes("+")) {
+            // db#+ doubles successes on rolls from # to 10
+            // note that this does not override no10
+            for (var j = parseInt(item, 10); j <= 10; j++) {
+              theRoll.doubleSet.add(j)
+            }
+          } else {
+            theRoll.doubleSet.add(parseInt(item, 10))
+          }
         })
       }
       // set rerolls
       if (options[i].startsWith('re')) {
-        var reroll = options[i].match(tenOrSingleDigit)
+        var reroll = options[i].match(tenOrSingleDigitOptionalPlus)
         reroll && reroll.forEach(function (item) {
-          theRoll.rerollSet.add(parseInt(item, 10))
+          if (item.includes("+")) {
+            // re#+ rerolls rolls from # to 10
+            for (var j = parseInt(item, 10); j <= 10; j++) {
+              theRoll.rerollSet.add(j)
+            }
+          } else {
+            theRoll.rerollSet.add(parseInt(item, 10))
+          }
         })
         let set = theRoll.rerollSet
         // Stop infinite cascading reroll
