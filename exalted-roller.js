@@ -1,43 +1,19 @@
 "use strict";
-const Clapp = require("./modules/clapp-discord");
-const Discord = require("discord.js");
-const bot = new Discord.Client();
+const { Client, Intents } = require("discord.js");
 const credentials = require("./token.js");
 
-console.log('starting dicebot');
-
-var app = new Clapp.App({
-  name: "d10",
-  desc: "A dice rolling bot for Exalted 3rd edition",
-  prefix: ".",
-  version: "2.0",
-  onReply: (msg, context) => {
-    // Fired when input is needed to be shown to the user.
-    // context.msg.reply('\n' + msg).then(bot_response => {
-    //   if (cfg.deleteAfterReply.enabled) {
-    //     context.msg.delete(cfg.deleteAfterReply.time)
-    //       .then(msg => console.log(`Deleted message from ${msg.author}`))
-    //       .catch(console.log);
-    //     bot_response.delete(cfg.deleteAfterReply.time)
-    //       .then(msg => console.log(`Deleted message from ${msg.author}`))
-    //       .catch(console.log);
-    //   }
-    // });
-  }
+const bot = new Client({
+  intents: [Intents.FLAGS.GUILDS, Intents.FLAGS.GUILD_MESSAGES],
 });
 
-bot.on("message", msg => {
+bot.on("message", (msg) => {
   if (msg.content.startsWith(".roll")) {
-    msg.reply(parseMessage(msg.content));
-  }
-
-  if (msg.content.startsWith(".role")) {
-    msg.reply(changeRoles(msg));
+    msg.reply(parseMessage(msg.content)).catch((err) => console.error(err.message, err));
   }
 });
 
 function Roll(numDice) {
-  var roll = function(numDice) {
+  var roll = function (numDice) {
     var rolls = [];
     for (var i = 0; i < numDice; i++) {
       rolls.push(rolld10());
@@ -102,19 +78,21 @@ function parseMessage(message) {
       }
       // set doubles
       // To-do: add code for double 7+ (doub;les 7,8,9,and 10)
-      if (options[i].startsWith('db')) {
-        var double = options[i].match(tenOrSingleDigit)
-        double && double.forEach(function (item) {
-          theRoll.doubleSet.add(parseInt(item, 10))
-        })
+      if (options[i].startsWith("db")) {
+        var double = options[i].match(tenOrSingleDigit);
+        double &&
+          double.forEach(function (item) {
+            theRoll.doubleSet.add(parseInt(item, 10));
+          });
       }
       // set rerolls
-      if (options[i].startsWith('re')) {
-        var reroll = options[i].match(tenOrSingleDigit)
-        reroll && reroll.forEach(function (item) {
-          theRoll.rerollSet.add(parseInt(item, 10))
-        })
-        let set = theRoll.rerollSet
+      if (options[i].startsWith("re")) {
+        var reroll = options[i].match(tenOrSingleDigit);
+        reroll &&
+          reroll.forEach(function (item) {
+            theRoll.rerollSet.add(parseInt(item, 10));
+          });
+        let set = theRoll.rerollSet;
         // Stop infinite cascading reroll
         if (
           set.has(1) &&
@@ -174,7 +152,7 @@ function cascade(rolls, rerollSet) {
 
 function countSuccessesAndDisplayResults(theRoll) {
   // Sort dice rolls
-  theRoll.rolls = theRoll.rolls.sort(function(a, b) {
+  theRoll.rolls = theRoll.rolls.sort(function (a, b) {
     return a - b;
   });
   console.log(theRoll);
@@ -218,74 +196,6 @@ function countSuccessesAndDisplayResults(theRoll) {
   );
 }
 
-// ROLE MANAGEMENT
-// TODO: restrict to Exalted Gaming server, turn off caps sensitivity
-function changeRoles(message) {
-  var availableroles = [
-    "1e",
-    "2e",
-    "3e",
-    "Godbound",
-    "Looking For Group",
-    "Member",
-    "Looking For Players",
-    "Storytellers",
-    "Players",
-    "Voice",
-    "Text"
-  ];
-  var rolestotoggle = [];
-  var newroles = [];
-  var flavortext = "";
-  var basetags = message.content.split("(");
-  basetags.shift();
-  basetags.forEach(function(potentialtag) {
-    var toggletag = potentialtag.match(/([a-z A-Z0-9',]+)/);
-    if (toggletag) {
-      const index = availableroles.map(r => r.toLowerCase()).indexOf(toggletag[1].toLowerCase());
-      if (index >= 0) {
-        rolestotoggle.push(availableroles[index]);
-      }
-    }
-  });
-
-  if (message.guild && rolestotoggle.length > 0) {
-    var roles = message.guild.roles.array();
-    // var originalroles = message.member.roles // never used?
-    roles.forEach(function(role) {
-      if (message.member.roles.has(role.id)) {
-        if (rolestotoggle.includes(role.name)) {
-          console.log(
-            "Removed " + role.name + " for " + message.author.username
-          );
-          flavortext += "-" + role.name + " ";
-        } else {
-          newroles.push(role.id);
-        }
-      } else {
-        if (rolestotoggle.includes(role.name)) {
-          console.log("Added " + role.name + " for " + message.author.username);
-          newroles.push(role.id);
-          flavortext += "+" + role.name + " ";
-        }
-      }
-    });
-  } else {
-    return "No toggleable roles found";
-  }
-
-  // var nickname = 'User' // nicknames not used
-  // if (!message.member.nickname) {
-  //   nickname = message.author.username
-  // } else {
-  //   nickname = message.member.nickname
-  // }
-  if (newroles.length > 0) {
-    message.member.setRoles(newroles);
-    return "tags: " + flavortext;
-  }
-}
-
-bot.login(credentials.token).then(() => {
+bot.login(credentials).then(() => {
   console.log("Running!");
 });
