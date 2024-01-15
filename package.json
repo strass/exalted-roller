@@ -1,14 +1,15 @@
 {
   "name": "d10",
-  "version": "2.0.0",
+  "version": "3.0.0",
   "description": "dice roller for exalted 3rd edition",
-  "homepage": "https://github.com/ZakStrassberg/exalted-roller",
+  "homepage": "https://github.com/strass/exalted-roller",
   "author": {
     "name": "Zak Strassberg",
     "email": "zakstrassberg@gmail.com",
-    "url": "zakstrassberg.com"
+    "url": "http://zakstrassberg.com"
   },
-  "main": "exalted-roller.js",
+  "module": "index.mjs",
+  "main": "index.mjs",
   "keywords": [
     "discord",
     "bot",
@@ -18,11 +19,10 @@
   "scripts": {
     "start": "node exalted-roller.js"
   },
-  "repository": "git@github.com:ZakStrassberg/exalted-roller.git",
+  "repository": "git@github.com:strass/exalted-roller.git",
   "license": "unlicense",
   "dependencies": {
-    "clapp": "^1.1.1",
-    "discord.js": "^11.0.0",
-    "minimist-string": "^1.0.2"
+    "lodash": "^4.17.21",
+    "slash-create": "^5.8.0"
   }
 }
